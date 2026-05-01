@@ -110,7 +110,6 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AccessControl.cs" />
     <Compile Include="Controllers\AccountsController.cs" />
-    <Compile Include="Controllers\MediasController.cs" />
     <Compile Include="Controllers\NotificationsController.cs" />
     <Compile Include="DAL\AssetAttribute.cs" />
     <Compile Include="DAL\DB.cs" />
@@ -125,16 +124,13 @@
     <Compile Include="Models\EmailView.cs" />
     <Compile Include="Models\Event.cs" />
     <Compile Include="Models\EventsRepository.cs" />
-    <Compile Include="Models\Like.cs" />
-    <Compile Include="Models\LikesRepository.cs" />
     <Compile Include="Models\Login.cs" />
     <Compile Include="Models\LoginCredential.cs" />
     <Compile Include="Models\LoginsRepository.cs" />
-    <Compile Include="Models\Media.cs" />
-    <Compile Include="Models\MediasRepository.cs" />
     <Compile Include="Models\Notification.cs" />
     <Compile Include="Models\NotificationsRepository.cs" />
     <Compile Include="Models\RenewPasswordView.cs" />
+    <Compile Include="Models\SelectListUtilities.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\UsersRepository.cs" />
     <Compile Include="obj\Debug\.NETFramework,Version=v4.8.AssemblyAttributes.cs" />
@@ -144,6 +140,13 @@
     <Compile Include="WebServices\GeoLocation.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Assets\teachers\bc2be815-cd3d-459d-a312-49e60229c80c.jpeg" />
+    <Content Include="App_Assets\teachers\c00b3008-a41a-4586-a338-1a589256b1bd.jpeg" />
+    <Content Include="App_Assets\teachers\c7a24783-6cbd-4583-a094-a72f2ac2e389.jpeg" />
+    <Content Include="App_Assets\teachers\f4e08e66-6485-4c73-b1f8-52edae4f497a.jpeg" />
+    <Content Include="App_Assets\teachers\f9a42fd9-87e4-41d6-87c6-50fa3526db49.jpeg" />
+    <Content Include="App_Assets\teachers\fbb51b24-2763-4d30-b175-6a78856ade4b.jpeg" />
+    <Content Include="App_Assets\teachers\no_avatar.png" />
     <Content Include="App_Assets\Users\156ab756-729a-4dc9-ae1d-cdda8ccfd00d.jpeg" />
     <Content Include="App_Assets\Users\32705cf0-2e95-4362-bce7-7d77cb8d4b84.jpeg" />
     <Content Include="App_Assets\Users\3b8cc315-9869-4eeb-acb0-9f539b33758aX.jpeg" />
@@ -156,6 +159,7 @@
     <Content Include="bin\WebApplication.dll" />
     <Content Include="bin\WebApplication.pdb" />
     <Content Include="Content\Accounts.css" />
+    <Content Include="Content\Courses.css" />
     <Content Include="Content\Icons.css" />
     <Content Include="Content\image-control.css" />
     <Content Include="Content\jqui-custom-datepicker.css" />
@@ -163,6 +167,8 @@
     <Content Include="Content\menu.css" />
     <Content Include="Content\Selections.css" />
     <Content Include="Content\site.css" />
+    <Content Include="Content\Students.css" />
+    <Content Include="Content\Teachers.css" />
     <Content Include="Content\ui-images\Abort.png" />
     <Content Include="Content\ui-images\Accept.png" />
     <Content Include="Content\ui-images\admin.png" />
@@ -398,23 +404,17 @@
     <Content Include="obj\Release\Wikimedia.csproj.CoreCompileInputs.cache" />
     <Content Include="obj\Release\Wikimedia.csproj.Up2Date" />
     <Content Include="App_Data\Events.json" />
-    <Content Include="App_Data\Likes.json" />
     <Content Include="App_Data\Logins.json" />
-    <Content Include="App_Data\Medias.json" />
     <Content Include="App_Data\Notifications.json" />
     <Content Include="App_Data\RenewPasswordCommands.json" />
     <Content Include="App_Data\UnverifiedEmails.json" />
     <Content Include="App_Data\Users.json" />
+    <Content Include="App_Data\Courses.json" />
+    <Content Include="App_Data\Students.json" />
+    <Content Include="App_Data\Teachers.json" />
     <None Include="packages.config" />
     <Content Include="Views\Shared\_header.cshtml" />
     <Content Include="Views\Medias\About.cshtml" />
-    <Content Include="Views\Medias\MediaForm.cshtml" />
-    <Content Include="Views\Medias\Create.cshtml" />
-    <Content Include="Views\Medias\Details.cshtml" />
-    <Content Include="Views\Medias\Edit.cshtml" />
-    <Content Include="Views\Medias\GetMedias.cshtml" />
-    <Content Include="Views\Medias\GetMediasCategoriesList.cshtml" />
-    <Content Include="Views\Medias\List.cshtml" />
     <Content Include="packages\Antlr.3.5.0.2\.signature.p7s" />
     <Content Include="packages\Antlr.3.5.0.2\Antlr.3.5.0.2.nupkg" />
     <Content Include="packages\Microsoft.AspNet.Mvc.5.3.0\.signature.p7s" />
@@ -446,7 +446,6 @@
     <Content Include="packages\WebGrease.1.6.0\.signature.p7s" />
     <Content Include="packages\WebGrease.1.6.0\WebGrease.1.6.0.nupkg" />
     <None Include="Properties\PublishProfiles\Wikimedia - Web Deploy.pubxml" />
-    <Content Include="Views\Medias\GetMediaDetails.cshtml" />
     <Content Include="Views\Accounts\EditProfil.cshtml" />
     <Content Include="Views\Accounts\EventsJournal.cshtml" />
     <Content Include="Views\Accounts\GetEventsList.cshtml" />
@@ -460,8 +459,6 @@
     <Content Include="Views\Accounts\RenewPasswordCommand.cshtml" />
     <Content Include="Views\Accounts\Subscribe.cshtml" />
     <None Include="Properties\PublishProfiles\Wikimedia-202339996 - Web Deploy.pubxml" />
-    <Content Include="Views\Medias\GetMediasUsersList.cshtml" />
-    <Content Include="Views\Medias\GetMediaLikes.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

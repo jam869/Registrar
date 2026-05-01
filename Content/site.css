@@ -1,7 +1,24 @@
 
+.unselected {
+    text-decoration: none;
+    color: lightgray;
+}
+
+    .unselected:hover {
+        color: aqua;
+    }
+
+label {
+    margin-top: 8px;
+}
+
+a, .noDecoration {
+    color: black;
+    text-decoration: none;
+}
 
 form {
-    max-width: 4in;
+    max-width: 10in;
     margin: auto;
 }
 
@@ -15,7 +32,9 @@ form {
 
 
 .detailsPanel dl {
+
     margin: auto;
+
     font-size: 1em;
 }
 
@@ -31,11 +50,12 @@ form {
 fieldset {
     border: 1px solid #ddd !important;
     border-radius: 6px !important;
-    padding: 6px !important;
+    padding: 8px !important;
     padding-top: 16px !important;
     display: flex;
     flex-direction: column;
     gap: 8px;
+    margin-bottom:6px;
 }
 
 legend {
@@ -83,7 +103,6 @@ details {
         margin-left: 6px;
     }
 }
-
 summary {
     background: lightgray;
     padding-left: 8px;
@@ -97,8 +116,11 @@ summary {
         font-size: 20px;
     }
 }
+
+.actionTitle {
+    font-size:1.3rem;
+}
+
 .highlight {
     background-color: yellow;
-    font-weight: bold;
-    color: black;
 }

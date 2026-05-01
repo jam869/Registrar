@@ -10,6 +10,7 @@
     padding-top : 8px;
     gap:0px;
     margin:0px;
+    padding-bottom:3px;
 }
 
 .HorSelectionsCMD {
@@ -47,6 +48,7 @@
     .selectionsGrid {
         display: flex;
         flex-flow: column;
+        margin-right: 2px;
     }
 
     .HorSelectionsCMD {
@@ -55,6 +57,7 @@
 
     .VerSelectionsCMD {
         display: flex;
+       
     }
 }
 

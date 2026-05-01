@@ -1,4 +1,11 @@
-﻿@helper ImageLink(string controller, string action, string imageUrl, string imageClass, string title)
+﻿@helper AvatarUser(Models.User user, string avatarClass = "UserMediumAvatar")
+{
+    var avatarUrl = user.Avatar;
+    <div class="userItem">
+        <div class="@avatarClass" style="background: url(@user.Avatar)"></div>
+        <div class="ellipsis">@user.Name</div>
+    </div>
+}@helper ImageLink(string controller, string action, string imageUrl, string imageClass, string title)
 {
     var Url = new System.Web.Mvc.UrlHelper(HttpContext.Current.Request.RequestContext);
     <a href="@Url.Action(action, controller)">
@@ -141,7 +148,7 @@
 }
 @helper CountryFlag(string countryCode)
 {
-    var country = PhotosManager.WebServices.Countries.Get(countryCode);
+    var country = WebServices.Countries.Get(countryCode);
     if (country != null)
     {
         <img src="@country.Flag" title="@country.Name" style="width:40px;" />
@@ -153,14 +160,6 @@
         <div class="UserSmallAvatar"
              style="background: url(@avatar)"></div>
     </a>
-}
-@helper AvatarUser(Models.User user, string avatarClass = "UserMediumAvatar")
-{
-    var avatarUrl = user.Avatar;
-    <div class="userItem">
-        <div class="@avatarClass" style="background: url(@user.Avatar)"></div>
-        <div class="ellipsis">@user.Name</div>
-    </div>
 }
 @helper UsersCheckList(IEnumerable<Models.User> users, List<int> selectedUsers, string usersCheckListName = "UsersCheckList")
 {
@@ -270,11 +269,13 @@
                         {
                             youtubeId = youtubeId.Substring(0, youtubeId.IndexOf("&"));
                         }
-                        string youtubeThumbnail = "https://i3.ytimg.com/vi/" + youtubeId + "/maxresdefault.jpg";
                         <br />
-                        <a href="@token" target="_blank">
-                            <img class="contentImage" src="@youtubeThumbnail" alt="" />
-                        </a>
+                        <iframe class="mediaPlayerBig"
+                                src="https://www.youtube.com/embed/@youtubeId"
+                                frameborder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowfullscreen>
+                        </iframe>                     
                         <br />
                     }
                     else
@@ -350,6 +351,7 @@
         }
     }
 }
+
 @helper YoutubePlayer(string youtubeId, string yt_class = "mediaPalyerBig")
 {
     <iframe class="mediaPlayerBig"

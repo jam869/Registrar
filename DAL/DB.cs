@@ -15,7 +15,6 @@ namespace DAL
         public static DB Instance { get { return instance; } }
         #endregion
 
-        public static MediasRepository Medias { get; set; } = new MediasRepository();
         
         static public UsersRepository Users { get; set; }
             = new UsersRepository();
@@ -34,8 +33,6 @@ namespace DAL
 
         static public Repository<RenewPasswordCommand> RenewPasswordCommands { get; set; }
             = new Repository<RenewPasswordCommand>();
-
-        public static LikesRepository Likes { get; set; } = new LikesRepository();
       
     }
 }

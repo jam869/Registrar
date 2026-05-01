@@ -1,7 +1,7 @@
 ﻿using System.Web;
 using System.Web.Optimization;
 
-namespace Wikimedia
+namespace Registrar
 {
     public class BundleConfig
     {

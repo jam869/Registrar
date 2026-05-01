@@ -10,7 +10,7 @@ using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 
-namespace Wikimedia
+namespace Registrar
 {
     public class MvcApplication : System.Web.HttpApplication
     {
@@ -55,10 +55,7 @@ namespace Wikimedia
             {
                 if (notification.User == null || notification.User == null) DB.Notifications.Delete(notification.Id);
             }
-            foreach (Models.Media media in DB.Medias.ToList().Copy())
-            {
-                if (media.Owner == null) DB.RenewPasswordCommands.Delete(media.Id);
-            }
+         
             Debug.Write("End of data cleaning");
         }
         protected void Session_Start()
