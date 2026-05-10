@@ -29,3 +29,92 @@
     .studentCode {
         color:blue;
     }
+
+
+/* Conteneur principal des deux listes */
+#dual-list-container {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    justify-content: center;
+    margin-top: 15px;
+    padding: 15px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+}
+
+    /* Disposition côte à côte (horizontal) */
+    #dual-list-container.side-by-side {
+        flex-direction: row;
+    }
+
+    /* Disposition verticale */
+    #dual-list-container.vertical {
+        flex-direction: column;
+    }
+
+/* Colonnes contenant les balises <select> */
+.list-column {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 450px;
+}
+
+    .list-column label {
+        font-weight: bold;
+        margin-bottom: 8px;
+        text-align: center;
+        color: #333;
+    }
+
+/* Style des boîtes de sélection multiple */
+.course-select {
+    width: 100%;
+    height: 250px; /* Assez grand pour voir plusieurs cours */
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-family: monospace;
+    font-size: 14px;
+}
+
+/* Colonne des boutons d'action au centre */
+.arrows-column {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Ajustement des boutons selon la disposition */
+#dual-list-container.side-by-side .arrows-column {
+    flex-direction: column;
+}
+
+#dual-list-container.vertical .arrows-column {
+    flex-direction: row;
+}
+
+/* Style des boutons (Flèches et X) */
+.arrow-btn, .btn-X {
+    padding: 10px 15px;
+    font-size: 16px;
+    cursor: pointer;
+    border: 1px solid #aaa;
+    background-color: #fff;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: all 0.2s ease-in-out;
+}
+
+    .arrow-btn:hover, .btn-X:hover {
+        background-color: #e2e6ea;
+        transform: scale(1.05);
+    }
+
+.btn-X {
+    color: #d9534f;
+    font-weight: bold;
+}
