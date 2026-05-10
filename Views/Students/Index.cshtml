@@ -1,0 +1,38 @@
+@model IEnumerable<Registrar.Models.Student>
+
+@{
+    ViewBag.Title = "Liste des étudiants";
+}
+
+<div class="header-container">
+    @if (Registrar.Models.User.ConnectedUser != null && Registrar.Models.User.ConnectedUser.CanWrite)
+    {
+        <a href="@Url.Action("Create")" class="icon fa fa-plus-circle" title="Ajouter un étudiant"></a>
+    }
+</div>
+
+<hr />
+
+<div class="students-list" id="studentsListContainer">
+    <img src="~/Content/UI-Images/Loading_icon.gif" alt="Chargement en cours..." style="display:block; margin:auto;" />
+</div>
+
+@section Scripts {
+    <script defer>
+        $(document).ready(function () {
+            // Utilisation du VRAI nom de la classe
+            let studentsPanel = new AutoRefreshedPanel(
+                "studentsListContainer",
+                "@Url.Action("GetStudents")",
+                5,
+                function () {
+                    // Magie : on restaure l'état des <details> (ouvert/fermé)
+                    // après chaque mise à jour pour ne pas frustrer l'usager !
+                    if (typeof RestoreDetailsState === "function") {
+                        RestoreDetailsState();
+                    }
+                }
+            );
+        });
+    </script>
+}

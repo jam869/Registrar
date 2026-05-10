@@ -5,18 +5,41 @@
 @using (Html.BeginForm())
 {
     @Html.HiddenFor(model => model.Id)
+    @Html.HiddenFor(model => model.Code)
+
+    @Html.ValidationSummary(false, "Attention :", new { @class = "text-danger", style = "color:red; font-weight:bold; margin-bottom:15px;" })
 
     <details id="info_section" open>
-        <summary>Informations - [@Model.Number]</summary>
+        <summary>Informations - [@Model.Code]</summary>
         <div class="form-grid">
-            @Html.EditorFor(m => m.FirstName)
-            @Html.EditorFor(m => m.LastName)
-            @Html.EditorFor(m => m.BirthDate)
-            @Html.EditorFor(m => m.Email)
-            @Html.EditorFor(m => m.Phone)
+            <div>
+                @Html.EditorFor(m => m.FirstName)
+                @Html.ValidationMessageFor(m => m.FirstName, "", new { @class = "text-danger", style = "color:red; font-size:12px;" })
+            </div>
+
+            <div>
+                @Html.EditorFor(m => m.LastName)
+                @Html.ValidationMessageFor(m => m.LastName, "", new { @class = "text-danger", style = "color:red; font-size:12px;" })
+            </div>
+
+            <div>
+                @Html.EditorFor(m => m.BirthDate)
+                @Html.ValidationMessageFor(m => m.BirthDate, "", new { @class = "text-danger", style = "color:red; font-size:12px;" })
+            </div>
+
+            <div>
+                @Html.EditorFor(m => m.Email)
+                @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger", style = "color:red; font-size:12px;" })
+            </div>
+
+            <div>
+                @Html.EditorFor(m => m.Phone, new { htmlAttributes = new { @class = "form-control Phone", placeholder = "(000) 000-0000" } })
+                @Html.ValidationMessageFor(m => m.Phone, "", new { @class = "text-danger", style = "color:red; font-size:12px;" })
+            </div>
         </div>
     </details>
-        
+
+
 
     <details id="enrollement_section" open>
         <summary>Inscriptions: @Registrar.Models.NextSession.Caption</summary>
@@ -58,4 +81,4 @@
 
 @section Scripts {
     <script src="~/Scripts/studentEdit.js"></script>
-}
+}   

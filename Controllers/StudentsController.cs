@@ -32,18 +32,17 @@ namespace Registrar.Controllers
 
             return View(student);
         }
-
         [HttpPost]
         [AccessControl.UserAccess(Access.Write)]
-        public ActionResult Edit(Student student, List<int> SelectedCourses) // <-- Changé pour List<int>
+        public ActionResult Edit(Student student, List<int> SelectedCourses)
         {
             if (ModelState.IsValid)
             {
                 Students.Update(student);
 
                 // Mise à jour des inscriptions
-                var validSessions = NextSession.ValidSessions;
-                var currentSessionCourses = Courses.ToList().Where(c => validSessions.Contains(c.Session)).ToList();
+                var currentSessions = NextSession.ValidSessions;
+                var currentSessionCourses = Courses.ToList().Where(c => currentSessions.Contains(c.Session)).ToList();
 
                 foreach (var course in currentSessionCourses)
                 {
@@ -63,7 +62,40 @@ namespace Registrar.Controllers
                 }
                 return RedirectToAction("Index");
             }
+
+            // --- AJOUTER CECI ICI ---
+            // Si on arrive ici, c'est que le formulaire est invalide. 
+            // On doit impérativement recharger les listes avant de réafficher la page !
+            var validSessions = NextSession.ValidSessions;
+
+            ViewBag.CurrentCourses = Courses.ToList()
+                .Where(c => c.Inscriptions.Contains(student.Id) && validSessions.Contains(c.Session))
+                .OrderBy(c => c.Sigle).ToList();
+
+            ViewBag.AvailableCourses = Courses.ToList()
+                .Where(c => !c.Inscriptions.Contains(student.Id) && validSessions.Contains(c.Session))
+                .OrderBy(c => c.Sigle).ToList();
+            // ------------------------
+
             return View(student);
+        }
+        // GET: Students
+        [AccessControl.UserAccess(Access.View)]
+        public ActionResult Index()
+        {
+            // On récupère la liste des étudiants pour l'afficher
+            return View(Students.ToList().OrderBy(s => s.LastName).ToList());
+        }
+        // Cette action sera appelée en boucle par JavaScript (AJAX)
+        [AccessControl.UserAccess(Access.View)]
+        public ActionResult GetStudents(bool forceRefresh = false)
+        {
+            // On vérifie si la DB a changé ou si c'est le premier chargement
+            if (forceRefresh || Students.HasChanged)
+            {
+                return PartialView(Students.ToList().OrderBy(s => s.LastName).ToList());
+            }
+            return null; // Si rien n'a changé, on ne renvoie rien (économise la bande passante)
         }
     }
 }

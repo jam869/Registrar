@@ -5,24 +5,24 @@ namespace Registrar.Models
 {
     public class Student : DAL.Record
     {
-        [Required(ErrorMessage = "Requis")]
-        public string Number { get; set; } // Numéro d'admission
+        [Required(ErrorMessage = "Numéro manquant")]
+        public string Code { get; set; }
 
-        [Required(ErrorMessage = "Requis")]
+        [Required(ErrorMessage = "Prénom manquant")]
         public string FirstName { get; set; }
 
-        [Required(ErrorMessage = "Requis")]
+        [Required(ErrorMessage = "Nom manquant")]
         public string LastName { get; set; }
 
-        [Required(ErrorMessage = "Requis")]
+        [Required(ErrorMessage = "Date manquante")]
         [DataType(DataType.Date)]
         public DateTime BirthDate { get; set; }
 
-        [Required(ErrorMessage = "Requis")]
+        [Required(ErrorMessage = "Courriel manquant")]
         [EmailAddress(ErrorMessage = "Invalide")]
         public string Email { get; set; }
 
-        [Required(ErrorMessage = "Requis")]
+        [Required(ErrorMessage = "Téléphone manquant")]
         [RegularExpression(@"^\(\d{3}\) \d{3}-\d{4}$", ErrorMessage = "Format: (000) 000-0000")]
         public string Phone { get; set; }
     }

@@ -1,0 +1,10 @@
+@model IEnumerable<Registrar.Models.Student>
+
+@foreach (var item in Model)
+{
+    <div class="student-item">
+        <a href="@Url.Action("Edit", new { id = item.Id })" class="student-link">
+            @item.Code - @item.FirstName @item.LastName
+        </a>
+    </div>
+}
