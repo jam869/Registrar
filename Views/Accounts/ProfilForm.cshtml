@@ -1,24 +1,24 @@
 ﻿
-@model Models.User
+@model Registrar.Models.User
 @{
     bool subscribing = Model.Id == 0;
     string notifyValue = Model.Notify ? "checked" : "";
     string access = "";
     string accessIcon = "";
-    bool userConnected = Models.User.ConnectedUser != null;
+    bool userConnected =Registrar.Models.User.ConnectedUser != null;
     if (userConnected)
     {
-        switch (Models.User.ConnectedUser.Access)
+        switch (Registrar.Models.User.ConnectedUser.Access)
         {
-            case Models.Access.View:
+            case Registrar.Models.Access.View:
                 accessIcon = "/Content/UI-Images/user.png";
                 access = "Lecture seule";
                 break;
-            case Models.Access.Write:
+            case Registrar.Models.Access.Write:
                 accessIcon = "/Content/UI-Images/power_user.png";
                 access = "Lecture/Écriture";
                 break;
-            case Models.Access.Admin:
+            case Registrar.Models.Access.Admin:
                 accessIcon = "/Content/UI-Images/admin.png";
                 access = "Administrateur";
                 break;

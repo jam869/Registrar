@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 using System;
 
-namespace Models
+namespace Registrar.Models
 {
     public class Notification : Record
     {

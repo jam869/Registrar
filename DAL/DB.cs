@@ -1,5 +1,5 @@
 ﻿using EmailHandling;
-using Models;
+using Registrar.Models;
 using PhotosManager.Models;
 using System.Collections.Generic;
 using System.Linq;

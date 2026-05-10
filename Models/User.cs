@@ -8,7 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using CompareAttribute = System.ComponentModel.DataAnnotations.CompareAttribute;
 
-namespace Models
+namespace Registrar.Models
 {
     public enum Access { Anonymous, View, Write, Admin }
     

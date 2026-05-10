@@ -9,6 +9,6 @@ namespace Registrar.Models
         public string Titre { get; set; }
         public int Session { get; set; } // 1 à 6
         // Liste des IDs des étudiants inscrits
-        public List<string> Inscriptions { get; set; } = new List<string>();
+        public List<int> Inscriptions { get; set; } = new List<int>();
     }
 }

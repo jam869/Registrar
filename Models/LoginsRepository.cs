@@ -1,5 +1,5 @@
 ﻿using DAL;
-using Models;
+using Registrar.Models;
 using PhotosManager.WebServices;
 using System;
 using System.Collections.Generic;

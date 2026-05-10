@@ -5,7 +5,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Web;
 
-namespace Models
+namespace Registrar.Models
 {
     public class UsersRepository : Repository<User>
     {

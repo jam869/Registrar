@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Web.Mvc;
 
-namespace Models
+namespace Registrar.Models
 {
     public class SelectListUtilities<T>
     {

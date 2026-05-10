@@ -1,6 +1,6 @@
 ﻿using DAL;
 using EmailHandling;
-using Models;
+using Registrar.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,7 +21,7 @@ namespace Controllers
         public JsonResult EmailAvailable(string Email)
         {
             bool NotAvailable = false;
-            int currentId = Models.User.ConnectedUser != null ? Models.User.ConnectedUser.Id : 0;
+            int currentId = Registrar.Models.User.ConnectedUser != null ? Registrar.Models.User.ConnectedUser.Id : 0;
             User foundUser = DB.Users.ToList().Where(u => u.Email == Email && u.Id != currentId).FirstOrDefault();
             NotAvailable = foundUser != null;
             return Json(NotAvailable, JsonRequestBehavior.AllowGet);
@@ -38,13 +38,13 @@ namespace Controllers
 
         public ActionResult Login(string message = "", bool success = true)
         {
-            if (Models.User.ConnectedUser != null)
+            if (Registrar.Models.User.ConnectedUser != null)
             {
                 if (success) DB.Events.Add("Logout"); else DB.Events.Add("Expired/blocked");
-                if (Models.User.ConnectedUser != null)
-                    DB.Logins.UpdateLogoutByUserId(Models.User.ConnectedUser.Id);
-                Models.User.ConnectedUser.Online = false;
-                Models.User.ConnectedUser = null;
+                if (Registrar.Models.User.ConnectedUser != null)
+                    DB.Logins.UpdateLogoutByUserId(Registrar.Models.User.ConnectedUser.Id);
+                Registrar.Models.User.ConnectedUser.Online = false;
+                Registrar.Models.User.ConnectedUser = null;
             }
 
             Session["LoginSuccess"] = success;
@@ -91,15 +91,15 @@ namespace Controllers
                     return Redirect("/Accounts/Login?message=Votre compte n'a pas été vérifié. Veuillez consultez le courriel de confirmation d'adresse de courriel.!&success=false");
                 }
             }
-            Models.User.ConnectedUser = loginUser;
+            Registrar.Models.User.ConnectedUser = loginUser;
             loginUser.Online = true;
-            DB.Logins.Add(Models.User.ConnectedUser.Id);
+            DB.Logins.Add(Registrar.Models.User.ConnectedUser.Id);
             DB.Events.Add("Login");
             return Redirect(RouteConfig.DefaultAction());
         }
         public ActionResult Subscribe()
         {
-            Models.User.ConnectedUser = null;
+            Registrar.Models.User.ConnectedUser = null;
             Session["CurrentLoginEmail"] = "";
             return View(new User());
         }
@@ -110,9 +110,9 @@ namespace Controllers
             user.Notify = NotifyCB == "on";
             user.Access = Access.View;
             DB.Users.Add(user);
-            Models.User.ConnectedUser = user;
+            Registrar.Models.User.ConnectedUser = user;
             DB.Events.Add("Subscribe");
-            Models.User.ConnectedUser = null;
+            Registrar.Models.User.ConnectedUser = null;
             AccountsEmailing.SendEmailVerification(Url.Action("VerifyUser", "Accounts", null, Request.Url.Scheme), user);
             return Redirect("/Accounts/Login?message=Création de compte effectuée avec succès! Un courriel de confirmation d'adresse vous a été envoyé.");
         }
@@ -210,10 +210,10 @@ namespace Controllers
             }
             return Redirect("/Accounts/Login?message=Erreur de modification de courriel!&success=false");
         }
-        [UserAccess(Models.Access.View)]
+        [UserAccess(Registrar.Models.Access.View)]
         public ActionResult EditProfil()
         {
-            User connectedUser = Models.User.ConnectedUser;
+            User connectedUser = Registrar.Models.User.ConnectedUser;
             if (connectedUser != null)
             {
                 Session["CurrentEditingUserPassword"] = DateTime.Now.Ticks.ToString();
@@ -222,7 +222,7 @@ namespace Controllers
             return Redirect(RouteConfig.DefaultAction());
         }
 
-        [UserAccess(Models.Access.View)]
+        [UserAccess(Registrar.Models.Access.View)]
         [HttpPost]
         [ValidateAntiForgeryToken()]
         public ActionResult EditProfil(User user, string NotifyCB = "off")
@@ -236,7 +236,7 @@ namespace Controllers
 
             DB.Events.Add("EditProfil");
             bool newEmail = false;
-            User connectedUser = Models.User.ConnectedUser;
+            User connectedUser = Registrar.Models.User.ConnectedUser;
             user.Id = connectedUser.Id;
             user.Blocked = connectedUser.Blocked;
             user.Access = connectedUser.Access;
@@ -254,7 +254,7 @@ namespace Controllers
             }
             if (DB.Users.Update(user))
             {
-                Models.User.ConnectedUser = DB.Users.Get(user.Id);
+                Registrar.Models.User.ConnectedUser = DB.Users.Get(user.Id);
                 DB.Notifications.Push(user.Id, "Votre profil a été modifié avec succès!");
             }
             if (newEmail)
@@ -262,11 +262,11 @@ namespace Controllers
             else
                 return Redirect(RouteConfig.DefaultAction());
         }
-        [UserAccess(Models.Access.View)]
+        [UserAccess(Registrar.Models.Access.View)]
         public ActionResult DeleteProfil()
         {
             DB.Events.Add("DeleteProfil");
-            User connectedUser = Models.User.ConnectedUser;
+            User connectedUser = Registrar.Models.User.ConnectedUser;
            
             DB.Users.Delete(connectedUser.Id);
             return RedirectToAction("Login?message=Votre compte a été effacé avec succès!");
@@ -277,7 +277,7 @@ namespace Controllers
         {
             if (DB.Users.HasChanged || DB.Logins.HasChanged || forceRefresh)
             {
-                return PartialView(DB.Users.ToList().Where(u => u.Id != Models.User.ConnectedUser.Id).OrderBy(u => u.Name).ToList());
+                return PartialView(DB.Users.ToList().Where(u => u.Id != Registrar.Models.User.ConnectedUser.Id).OrderBy(u => u.Name).ToList());
             }
             return null;
         }
@@ -298,15 +298,15 @@ namespace Controllers
                 if (user != null)
                 {
                     int previousAccess = (int)user.Access;
-                    user.Access = (Models.Access)access;
+                    user.Access = (Registrar.Models.Access)access;
 
                     DB.Users.Update(user);
                     string accessTitle = "Anonyme";
                     switch (user.Access)
                     {
-                        case Models.Access.View: accessTitle = "Lecture seule"; break;
-                        case Models.Access.Write: accessTitle = "Lecture/Écriture"; break;
-                        case Models.Access.Admin: accessTitle = "Administrateur"; break;
+                        case Registrar.Models.Access.View: accessTitle = "Lecture seule"; break;
+                        case Registrar.Models.Access.Write: accessTitle = "Lecture/Écriture"; break;
+                        case Registrar.Models.Access.Admin: accessTitle = "Administrateur"; break;
                     }
 
                     string message = "Vos ayant droits ont été modifiés : " + accessTitle;

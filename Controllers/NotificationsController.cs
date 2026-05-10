@@ -1,4 +1,4 @@
-﻿using Models;
+﻿using Registrar.Models;
 using System.Web.Mvc;
 
 namespace Controllers

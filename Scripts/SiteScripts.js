@@ -167,3 +167,39 @@ function highlight(text, elem) {
         elem.innerHTML = innerHTML;
     }
 }
+
+$(document).ready(function () {
+    // Restaurer l'état au chargement
+    $("details").each(function () {
+        if (this.id) {
+            let savedState = localStorage.getItem(this.id);
+            if (savedState === "true") $(this).attr("open", "");
+            if (savedState === "false") $(this).removeAttr("open");
+        }
+    });
+
+    // Sauvegarder lors du clic (toggle)
+    $("details").on("toggle", function () {
+        if (this.id) {
+            localStorage.setItem(this.id, this.open);
+        }
+    });
+
+    // Gérer le Ctrl+Clic pour tout ouvrir/fermer
+    $("summary").click(function (e) {
+        if (e.ctrlKey) {
+            e.preventDefault();
+            let parentDetails = $(this).parent()[0];
+            let state = !parentDetails.open;
+
+            $("details").each(function () {
+                if (state) {
+                    $(this).attr("open", "");
+                } else {
+                    $(this).removeAttr("open");
+                }
+                $(this).trigger("toggle");
+            });
+        }
+    });
+});

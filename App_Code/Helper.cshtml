@@ -1,4 +1,4 @@
-﻿@helper AvatarUser(Models.User user, string avatarClass = "UserMediumAvatar")
+﻿@helper AvatarUser(Registrar.Models.User user, string avatarClass = "UserMediumAvatar")
 {
     var avatarUrl = user.Avatar;
     <div class="userItem">
@@ -146,14 +146,6 @@
         @caption
     </button>
 }
-@helper CountryFlag(string countryCode)
-{
-    var country = WebServices.Countries.Get(countryCode);
-    if (country != null)
-    {
-        <img src="@country.Flag" title="@country.Name" style="width:40px;" />
-    }
-}
 @helper avatarLink(string avatar, string linkUrl)
 {
     <a href="@linkUrl" data-toggle="tooltip" title="Modifier le profil....">
@@ -161,7 +153,7 @@
              style="background: url(@avatar)"></div>
     </a>
 }
-@helper UsersCheckList(IEnumerable<Models.User> users, List<int> selectedUsers, string usersCheckListName = "UsersCheckList")
+@helper UsersCheckList(IEnumerable<Registrar.Models.User> users, List<int> selectedUsers, string usersCheckListName = "UsersCheckList")
 {
     var Url = new System.Web.Mvc.UrlHelper(HttpContext.Current.Request.RequestContext);
 

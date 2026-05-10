@@ -1,12 +1,12 @@
 ﻿using DAL;
-using Models;
+using Registrar.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace Models
+namespace Registrar.Models
 {
     public class Event : Record
     {

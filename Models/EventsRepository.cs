@@ -1,12 +1,12 @@
 ﻿using DAL;
-using Models;
+using Registrar.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Emit;
 using System.Web;
 
-namespace Models
+namespace Registrar.Models
 {
     public class EventsRepository : Repository<Event>
     {

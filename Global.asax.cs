@@ -65,7 +65,7 @@ namespace Registrar
         }
         protected void Session_End()
         {
-            var connectedUser = Models.User.ConnectedUser;
+            var connectedUser = Registrar.Models.User.ConnectedUser;
             if (connectedUser != null)
                 connectedUser.Online = false;
         }

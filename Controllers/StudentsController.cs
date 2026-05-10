@@ -1,7 +1,8 @@
-using System.Web.Mvc;
+using Controllers;
 using Registrar.Models;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
+using System.Web.Mvc;
 
 namespace Registrar.Controllers
 {
@@ -13,7 +14,7 @@ namespace Registrar.Controllers
 
         // GET: Students/Edit/5
         [AccessControl.UserAccess(Access.Write)]
-        public ActionResult Edit(string id)
+        public ActionResult Edit(int id) // <-- Changé pour int
         {
             Student student = Students.Get(id);
             if (student == null) return HttpNotFound();
@@ -21,11 +22,11 @@ namespace Registrar.Controllers
             // Filtrer les cours selon la session courante définie par le prof
             var validSessions = NextSession.ValidSessions;
 
-            ViewBag.CurrentCourses = Courses.Entries
+            ViewBag.CurrentCourses = Courses.ToList()
                 .Where(c => c.Inscriptions.Contains(id) && validSessions.Contains(c.Session))
                 .OrderBy(c => c.Sigle).ToList();
 
-            ViewBag.AvailableCourses = Courses.Entries
+            ViewBag.AvailableCourses = Courses.ToList()
                 .Where(c => !c.Inscriptions.Contains(id) && validSessions.Contains(c.Session))
                 .OrderBy(c => c.Sigle).ToList();
 
@@ -34,15 +35,15 @@ namespace Registrar.Controllers
 
         [HttpPost]
         [AccessControl.UserAccess(Access.Write)]
-        public ActionResult Edit(Student student, List<string> SelectedCourses)
+        public ActionResult Edit(Student student, List<int> SelectedCourses) // <-- Changé pour List<int>
         {
             if (ModelState.IsValid)
             {
                 Students.Update(student);
 
-                // Mise à jour des inscriptions (Logique simplifiée pour la session courante)
+                // Mise à jour des inscriptions
                 var validSessions = NextSession.ValidSessions;
-                var currentSessionCourses = Courses.Entries.Where(c => validSessions.Contains(c.Session)).ToList();
+                var currentSessionCourses = Courses.ToList().Where(c => validSessions.Contains(c.Session)).ToList();
 
                 foreach (var course in currentSessionCourses)
                 {

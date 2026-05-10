@@ -10,7 +10,7 @@
     var Categories = (List<string>)Session["Categories"];
 
     /* Sort setup */
-    var mediaSortBy = Session["MediaSortBy"] != null ? (Models.MediaSortBy)Session["MediaSortBy"] : MediaSortBy.PublishDate;
+    var mediaSortBy = Session["MediaSortBy"] != null ? (Registrar.Models.MediaSortBy)Session["MediaSortBy"] : MediaSortBy.PublishDate;
     bool SearchAscending = Session["SortAscending"] != null ? (bool)Session["SortAscending"] : false;
 
     string checkSortByTitle = mediaSortBy == MediaSortBy.Title ? "fa-check" : "";
@@ -34,9 +34,9 @@
             iconSortByTitle = "Tri des vidéos par j'aime";
             break;
     }
-    bool userConnected = Models.User.ConnectedUser != null;
-    bool userIsAdmin = userConnected ? Models.User.ConnectedUser.IsAdmin : false;
-    bool userCanWrite = userConnected ? Models.User.ConnectedUser.CanWrite : false;
+    bool userConnected = Registrar.Models.User.ConnectedUser != null;
+    bool userIsAdmin = userConnected ? Registrar.Models.User.ConnectedUser.IsAdmin : false;
+    bool userCanWrite = userConnected ? Registrar.Models.User.ConnectedUser.CanWrite : false;
 
     string index = RouteConfig.DefaultAction();
 }
@@ -145,8 +145,8 @@
                                 <a href="/Medias/SetMediaSortBy?mediaSortBy=@MediaSortBy.Title">Trier par titre</a>
                             </div>
                             <div class="dropdown-item item-layout">
-                                <i class="menuIcon fa @(mediaSortBy == Models.MediaSortBy.Likes ? "fa-check" : "")"></i>
-                                <a href="/Medias/SetMediaSortBy?mediaSortBy=@Models.MediaSortBy.Likes">Trier par j'aime</a>
+                                <i class="menuIcon fa @(mediaSortBy == Registrar.Models.MediaSortBy.Likes ? "fa-check" : "")"></i>
+                                <a href="/Medias/SetMediaSortBy?mediaSortBy=@Registrar.Models.MediaSortBy.Likes">Trier par j'aime</a>
                             </div>
 
                             <div class="dropdown-divider"></div>
