@@ -1,45 +1,42 @@
-﻿$(document).ready(function() {
-    // Gérer l'affichage côte à côte vs vertical
-    function updateLayout()
-    {
+﻿$(document).ready(function () {
+    // 1. Gestion du layout (côte à côte vs vertical)
+    function updateLayout() {
         let isInfoOpen = $("#info_section").prop("open");
-        if (isInfoOpen)
-        {
+        if (isInfoOpen) {
             $("#dual-list-container").removeClass("vertical").addClass("side-by-side");
             $("#moveToAvailable").text("▶");
             $("#moveToCurrent").text("◀");
-        }
-        else
-        {
+        } else {
             $("#dual-list-container").removeClass("side-by-side").addClass("vertical");
             $("#moveToAvailable").text("▼");
             $("#moveToCurrent").text("▲");
         }
     }
 
-    $("#info_section").on("toggle", updateLayout);
+    $(document).on("toggle", "#info_section", updateLayout);
     updateLayout();
 
-    // Transfert vers "Disponibles"
-    $("#moveToAvailable").click(function() {
+    // 2. Transfert vers "Disponibles" (Utilisation de .on pour AJAX)
+    $(document).on("click", "#moveToAvailable", function () {
         $("#CurrentCourses option:selected").detach().appendTo("#AvailableCourses");
     });
 
-    // Transfert vers "Actuels"
-    $("#moveToCurrent").click(function() {
+    // 3. Transfert vers "Actuels"
+    $(document).on("click", "#moveToCurrent", function () {
         $("#AvailableCourses option:selected").detach().appendTo("#CurrentCourses");
     });
 
-    // Désélectionner tout (le fameux bouton X)
-    $("#deselectAll").click(function() {
+    // 4. Bouton X
+    $(document).on("click", "#deselectAll", function () {
         $("#CurrentCourses option, #AvailableCourses option").prop("selected", false);
     });
 
-    // Avant de soumettre le formulaire, on crée des inputs cachés pour les cours dans "Actuels"
-    $("form").submit(function() {
+    // 5. Avant la soumission : on prépare les données pour le C#
+    $(document).on("submit", "form", function () {
         $("#hiddenSelections").empty();
-        $("#CurrentCourses option").each(function() {
-            $("#hiddenSelections").append(`< input type = "hidden" name = "SelectedCourses" value = "${$(this).val()}" />`);
+        $("#CurrentCourses option").each(function () {
+            // Correction de la syntaxe de l'input caché
+            $("#hiddenSelections").append('<input type="hidden" name="SelectedCourses" value="' + $(this).val() + '" />');
         });
     });
 });

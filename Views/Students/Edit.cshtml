@@ -41,30 +41,37 @@
 
 
 
-    <details id="enrollement_section" open>
-        <summary>Inscriptions: @Registrar.Models.NextSession.Caption</summary>
-
+    <div id="enrollement_section">
         <div id="inscriptionsContainer">
             @* Sera chargé par AJAX *@
         </div>
-
         <div id="hiddenSelections"></div>
-    </details>
+    </div>
 
-    @section Scripts {
-        <script src="~/Scripts/studentEdit.js"></script>
-        <script>
-        $(document).ready(function () {
-            // On rafraîchit les listes de cours toutes les 5 secondes
-            new AutoRefreshedPanel(
-                "inscriptionsContainer",
-                "/Students/GetInscriptions/@Model.Id",
-                5,
-                function() {
-                    // Optionnel: réinitialiser les événements de vos boutons flèches si nécessaire
+    @* LE BOUTON REVIENT ICI : *@
+    <div style="margin-top: 20px;">
+        <input type="submit" value="Enregistrer" class="btn btn-primary" />
+        @Html.ActionLink("Annuler", "Index", null, new { @class = "btn btn-default" })
+    </div>
+} @* <--- Fermeture du Html.BeginForm() *@
+
+@* LE SECTION SCRIPTS DOIT ÊTRE À L'EXTÉRIEUR DU FORMULAIRE *@
+@section Scripts {
+    <script src="~/Scripts/studentEdit.js"></script>
+    <script>
+    $(document).ready(function () {
+        new AutoRefreshedPanel(
+            "inscriptionsContainer",
+            "/Students/GetInscriptions/@Model.Id",
+            5,
+            function() {
+                // Si vous n'utilisez pas la "Délégation d'événements" (voir ci-dessous),
+                // vous devriez rappeller votre fonction d'initialisation ici.
+                if (typeof initStudentEdit === "function") {
+                    initStudentEdit();
                 }
-            );
-        });
-        </script>
-    }
+            }
+        );
+    });
+    </script>
 }
