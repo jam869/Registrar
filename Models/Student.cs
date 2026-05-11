@@ -16,6 +16,7 @@ namespace Registrar.Models
 
         [Required(ErrorMessage = "Date manquante")]
         [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime BirthDate { get; set; }
 
         [Required(ErrorMessage = "Courriel manquant")]

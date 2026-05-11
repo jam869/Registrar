@@ -1,0 +1,23 @@
+@{
+    ViewBag.Title = "Liste des cours";
+}
+
+<div class="header-container">
+    @if (Registrar.Models.User.ConnectedUser != null && Registrar.Models.User.ConnectedUser.CanWrite)
+    {
+        <a href="@Url.Action("Create")" class="icon fa fa-plus-circle" title="Ajouter un cours"></a>
+    }
+</div>
+
+<hr />
+<div id="coursesListContainer">
+    @* La liste sera chargée ici par GetCourses *@
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            new AutoRefreshedPanel("coursesListContainer", "@Url.Action("GetCourses")", 5);
+        });
+    </script>
+}

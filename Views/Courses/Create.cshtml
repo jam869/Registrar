@@ -1,0 +1,37 @@
+@model Registrar.Models.Course
+
+@{ ViewBag.Title = "Nouveau Cours"; }
+
+<h2>Nouveau Cours</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="form-group">
+            <label>Code (ex: 420-KB1-LG)</label>
+            @Html.EditorFor(model => model.Code, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Code, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="form-group">
+            <label>Titre du cours</label>
+            @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="form-group">
+            <label>Session (1 à 6)</label>
+            @Html.EditorFor(model => model.Session, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Session, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="form-group" style="margin-top: 20px;">
+            <input type="submit" value="Créer" class="btn btn-primary" />
+            @Html.ActionLink("Annuler", "Index", null, new { @class = "btn btn-default" })
+        </div>
+    </div>
+}

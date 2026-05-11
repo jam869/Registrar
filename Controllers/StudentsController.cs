@@ -1,4 +1,5 @@
 using Controllers;
+using DAL;
 using Registrar.Models;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,11 +25,11 @@ namespace Registrar.Controllers
 
             ViewBag.CurrentCourses = Courses.ToList()
                 .Where(c => c.Inscriptions.Contains(id) && validSessions.Contains(c.Session))
-                .OrderBy(c => c.Sigle).ToList();
+                .OrderBy(c => c.Code).ToList();
 
             ViewBag.AvailableCourses = Courses.ToList()
                 .Where(c => !c.Inscriptions.Contains(id) && validSessions.Contains(c.Session))
-                .OrderBy(c => c.Sigle).ToList();
+                .OrderBy(c => c.Code).ToList();
 
             return View(student);
         }
@@ -70,11 +71,11 @@ namespace Registrar.Controllers
 
             ViewBag.CurrentCourses = Courses.ToList()
                 .Where(c => c.Inscriptions.Contains(student.Id) && validSessions.Contains(c.Session))
-                .OrderBy(c => c.Sigle).ToList();
+                .OrderBy(c => c.Code).ToList();
 
             ViewBag.AvailableCourses = Courses.ToList()
                 .Where(c => !c.Inscriptions.Contains(student.Id) && validSessions.Contains(c.Session))
-                .OrderBy(c => c.Sigle).ToList();
+                .OrderBy(c => c.Code).ToList();
             // ------------------------
 
             return View(student);
@@ -96,6 +97,26 @@ namespace Registrar.Controllers
                 return PartialView(Students.ToList().OrderBy(s => s.LastName).ToList());
             }
             return null; // Si rien n'a changé, on ne renvoie rien (économise la bande passante)
+        }
+        [AccessControl.UserAccess(Access.View)]
+        public ActionResult GetInscriptions(int id, bool forceRefresh = false)
+        {
+            if (forceRefresh || DB.Courses.HasChanged)
+            {
+                var student = Students.Get(id);
+                var validSessions = NextSession.ValidSessions;
+
+                ViewBag.CurrentCourses = DB.Courses.ToList()
+                    .Where(c => c.Inscriptions.Contains(id) && validSessions.Contains(c.Session))
+                    .OrderBy(c => c.Code).ToList();
+
+                ViewBag.AvailableCourses = DB.Courses.ToList()
+                    .Where(c => !c.Inscriptions.Contains(id) && validSessions.Contains(c.Session))
+                    .OrderBy(c => c.Code).ToList();
+
+                return PartialView("_Inscriptions");
+            }
+            return null;
         }
     }
 }

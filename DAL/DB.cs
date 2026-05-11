@@ -27,7 +27,8 @@ namespace DAL
 
         static public EventsRepository Events { get; set; }
             = new EventsRepository();
-
+        static public Repository<Student> Students { get; set; } = new Repository<Student>();
+        static public Repository<Course> Courses { get; set; } = new Repository<Course>();
         static public Repository<UnverifiedEmail> UnverifiedEmails { get; set; }
             = new Repository<UnverifiedEmail>();
 

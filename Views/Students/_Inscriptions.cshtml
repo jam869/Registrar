@@ -1,0 +1,27 @@
+﻿<div id="dual-list-container" class="side-by-side">
+    <div class="list-column">
+        <label>Cours actuels</label>
+        <select id="CurrentCourses" multiple class="course-select">
+            @foreach (var c in ViewBag.CurrentCourses)
+            {
+                <option value="@c.Id">[@c.Session] @c.Code - @c.Title</option>
+            }
+        </select>
+    </div>
+
+    <div class="arrows-column">
+        <button type="button" id="moveToAvailable" class="arrow-btn">▶</button>
+        <button type="button" id="moveToCurrent" class="arrow-btn">◀</button>
+        <button type="button" id="deselectAll" class="btn-X">X</button>
+    </div>
+
+    <div class="list-column">
+        <label>Cours disponibles</label>
+        <select id="AvailableCourses" multiple class="course-select">
+            @foreach (var c in ViewBag.AvailableCourses)
+            {
+                <option value="@c.Id">[@c.Session] @c.Code - @c.Title</option>
+            }
+        </select>
+    </div>
+</div>

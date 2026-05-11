@@ -23,7 +23,7 @@
             </div>
 
             <div>
-                @Html.EditorFor(m => m.BirthDate)
+                @Html.TextBoxFor(m => m.BirthDate, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
                 @Html.ValidationMessageFor(m => m.BirthDate, "", new { @class = "text-danger", style = "color:red; font-size:12px;" })
             </div>
 
@@ -44,41 +44,27 @@
     <details id="enrollement_section" open>
         <summary>Inscriptions: @Registrar.Models.NextSession.Caption</summary>
 
-        <div id="dual-list-container" class="side-by-side">
-            <div class="list-column">
-                <label>Cours actuels</label>
-                <select id="CurrentCourses" multiple class="course-select">
-                    @foreach (var c in ViewBag.CurrentCourses)
-                    {
-                        <option value="@c.Id">[@c.Session] @c.Sigle - @c.Titre</option>
-                    }
-                </select>
-            </div>
-
-            <div class="arrows-column">
-                <button type="button" id="moveToAvailable" class="arrow-btn">▶</button>
-                <button type="button" id="moveToCurrent" class="arrow-btn">◀</button>
-                <button type="button" id="deselectAll" class="btn-X">X</button>
-            </div>
-
-            <div class="list-column">
-                <label>Cours disponibles</label>
-                <select id="AvailableCourses" multiple class="course-select">
-                    @foreach (var c in ViewBag.AvailableCourses)
-                    {
-                        <option value="@c.Id">[@c.Session] @c.Sigle - @c.Titre</option>
-                    }
-                </select>
-            </div>
+        <div id="inscriptionsContainer">
+            @* Sera chargé par AJAX *@
         </div>
 
-        @* Hidden inputs pour soumettre les IDs sélectionnés au serveur *@
         <div id="hiddenSelections"></div>
     </details>
 
-    <input type="submit" value="Enregistrer" class="btn btn-primary" />
+    @section Scripts {
+        <script src="~/Scripts/studentEdit.js"></script>
+        <script>
+        $(document).ready(function () {
+            // On rafraîchit les listes de cours toutes les 5 secondes
+            new AutoRefreshedPanel(
+                "inscriptionsContainer",
+                "/Students/GetInscriptions/@Model.Id",
+                5,
+                function() {
+                    // Optionnel: réinitialiser les événements de vos boutons flèches si nécessaire
+                }
+            );
+        });
+        </script>
+    }
 }
-
-@section Scripts {
-    <script src="~/Scripts/studentEdit.js"></script>
-}   

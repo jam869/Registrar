@@ -1,0 +1,12 @@
+@model IEnumerable<Registrar.Models.Course>
+
+
+@foreach (var item in Model)
+{
+    <div class="course-item" style="border-bottom: 1px solid #ccc; padding: 10px;">
+        <a href="@Url.Action("Edit", new { id = item.Id })" style="text-decoration:none; color:black;">
+            <strong>[@item.Code]</strong> @item.Title <br />
+            <small>Session : @item.Session</small>
+        </a>
+    </div>
+}
