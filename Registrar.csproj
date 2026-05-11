@@ -113,6 +113,7 @@
     <Compile Include="Controllers\CoursesController.cs" />
     <Compile Include="Controllers\NotificationsController.cs" />
     <Compile Include="Controllers\StudentsController.cs" />
+    <Compile Include="Controllers\TeachersController.cs" />
     <Compile Include="DAL\AssetAttribute.cs" />
     <Compile Include="DAL\DB.cs" />
     <Compile Include="DAL\ImageAsset.cs" />
@@ -138,11 +139,13 @@
     <Compile Include="Models\SelectListUtilities.cs" />
     <Compile Include="Models\Student.cs" />
     <Compile Include="Models\StudentsRepository.cs" />
+    <Compile Include="Models\Teacher.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\UsersRepository.cs" />
     <Compile Include="obj\Debug\.NETFramework,Version=v4.8.AssemblyAttributes.cs" />
     <Compile Include="obj\Release\.NETFramework,Version=v4.8.AssemblyAttributes.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Content Include="WebApp.png" />
     <Content Include="Scripts\studentEdit.js" />
     <Compile Include="WebServices\Countries.cs" />
     <Compile Include="WebServices\GeoLocation.cs" />
@@ -254,7 +257,6 @@
     <Content Include="obj\Release\Package\PackageTmp\Scripts\SiteScripts.js" />
     <Content Include="obj\Release\Package\PackageTmp\Scripts\validation.js" />
     <Content Include="obj\Release\Package\PackageTmp\updatingView.gif" />
-    <Content Include="obj\Release\Package\PackageTmp\WebApp.png" />
     <Content Include="obj\Release\Package\Wikimedia.SourceManifest.xml" />
     <Content Include="obj\Release\WebApplication.dll" />
     <Content Include="obj\Release\WebApplication.pdb" />
@@ -336,7 +338,6 @@
     <Content Include="packages\Newtonsoft.Json.13.0.4\packageIcon.png" />
     <Content Include="packages\WebGrease.1.6.0\lib\WebGrease.dll" />
     <Content Include="packages\WebGrease.1.6.0\tools\WG.EXE" />
-    <Content Include="WebApp.png" />
     <Content Include="Scripts\autoRefreshPanel.js" />
     <Content Include="Scripts\bootbox.js" />
     <Content Include="Scripts\image-control.js" />
@@ -467,6 +468,13 @@
     <Content Include="Views\Courses\Create.cshtml" />
     <Content Include="Views\Courses\Edit.cshtml" />
     <Content Include="Views\Students\_Inscriptions.cshtml" />
+    <Content Include="Views\Teachers\Index.cshtml" />
+    <Content Include="Views\Teachers\GetTeachers.cshtml" />
+    <Content Include="Views\Teachers\Create.cshtml" />
+    <Content Include="Views\Teachers\Edit.cshtml" />
+    <Content Include="Views\Students\Create.cshtml" />
+    <Content Include="Views\Students\Details.cshtml" />
+    <Content Include="Views\Teachers\Details.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

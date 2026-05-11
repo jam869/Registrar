@@ -1,0 +1,62 @@
+@model Registrar.Models.Student
+
+@{ ViewBag.Title = "Étudiant - Détails"; }
+
+<div class="details-header">
+    @Model.FirstName @Model.LastName
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        @* Les icônes exactes demandées par le professeur *@
+        <div class="detail-row">
+            <i class="fa fa-barcode" title="Code"></i> <strong>@Model.Code</strong>
+        </div>
+        <div class="detail-row">
+            <i class="fa fa-phone" title="Téléphone"></i> @Model.Phone
+        </div>
+        <div class="detail-row">
+            <i class="fa fa-paper-plane" title="Courriel"></i> <a href="mailto:@Model.Email">@Model.Email</a>
+        </div>
+        <div class="detail-row">
+            <i class="fa fa-birthday-cake" title="Date de naissance"></i> @Model.BirthDate.ToString("yyyy-MM-dd")
+        </div>
+    </div>
+
+    <div class="col-md-6" style="text-align: right;">
+        @if (Registrar.Models.User.ConnectedUser != null && Registrar.Models.User.ConnectedUser.CanWrite)
+        {
+            <a href="@Url.Action("Edit", new { id = Model.Id })" class="btn btn-default" title="Modifier l'étudiant"><i class="fa fa-edit"></i></a>
+            <a href="@Url.Action("Delete", new { id = Model.Id })" class="btn btn-danger" title="Effacer l'étudiant" onclick="return confirm('Voulez-vous vraiment effacer cet étudiant ?');"><i class="fa fa-trash"></i></a>
+        }
+        <a href="@Url.Action("Index")" class="btn btn-default" title="Retour à la liste"><i class="fa fa-list"></i></a>
+    </div>
+</div>
+
+<h3 style="margin-top: 30px;">Inscriptions</h3>
+
+@{
+    var enrolledCourses = ViewBag.EnrolledCourses as IEnumerable<Registrar.Models.Course>;
+}
+
+<details id="details_inscriptions_@Model.Id" open>
+    <summary>Inscriptions : @Registrar.Models.NextSession.Caption</summary>
+    <div style="padding: 10px;">
+        @if (enrolledCourses != null && enrolledCourses.Any())
+        {
+            foreach (var course in enrolledCourses)
+            {
+                <div class="course-row" style="margin-bottom: 5px;">
+                    @* Remarque : On pointe vers Edit car la page Details pour les cours n'est pas demandée *@
+                    <a href="@Url.Action("Edit", "Courses", new { id = course.Id })" style="color: black; text-decoration: none;">
+                        <span style="color: #0066cc; font-weight: bold; margin-right: 10px;">[@course.Session] @course.Code</span> @course.Title
+                    </a>
+                </div>
+            }
+        }
+        else
+        {
+            <p>Aucune inscription pour l'instant.</p>
+        }
+    </div>
+</details>

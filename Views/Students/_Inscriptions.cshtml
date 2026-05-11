@@ -1,7 +1,7 @@
 ﻿<div id="dual-list-container" class="side-by-side">
     <div class="list-column">
         <label>Cours actuels</label>
-        <select id="CurrentCourses" multiple class="course-select">
+        <select id="CurrentCourses" name="SelectedCourses" multiple class="course-select">
             @foreach (var c in ViewBag.CurrentCourses)
             {
                 <option value="@c.Id">[@c.Session] @c.Code - @c.Title</option>

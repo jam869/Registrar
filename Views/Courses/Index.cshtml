@@ -16,8 +16,19 @@
 
 @section Scripts {
     <script>
-        $(document).ready(function () {
-            new AutoRefreshedPanel("coursesListContainer", "@Url.Action("GetCourses")", 5);
-        });
+      $(document).ready(function () {
+    new AutoRefreshedPanel(
+        "coursesListContainer",
+        "@Url.Action("GetCourses")",
+        5,
+        function () {
+            if (typeof RestoreDetailsState === "function") {
+                RestoreDetailsState(); // <--- TRÈS IMPORTANT
+            }
+        }
+          );
+
+});
+
     </script>
-}
+    }

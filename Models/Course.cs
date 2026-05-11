@@ -19,5 +19,7 @@ namespace Registrar.Models
         public int Session { get; set; }
 
         public List<int> Inscriptions { get; set; } = new List<int>();
+        // Cette propriété génère exactement l'affichage demandé par le prof : "[Session] Sigle Titre"
+        public string Name => $"[{Session}] {Code} {Title}";
     }
 }

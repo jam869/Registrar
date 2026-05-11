@@ -9,6 +9,18 @@
     {
         <a href="@Url.Action("Create")" class="icon fa fa-plus-circle" title="Ajouter un étudiant"></a>
     }
+    <div class="search-bar-container" style="margin-bottom: 15px;">
+        <button id="toggleSearchBtn" class="btn btn-default"><i class="fa fa-search"></i> Rechercher</button>
+
+        <div id="searchPanel" style="display:none; margin-top:10px; background:#f9f9f9; padding:10px; border-radius:5px;">
+            <input type="text" id="searchInput" class="form-control" placeholder="Rechercher par nom ou code..." style="display:inline-block; width:200px; margin-right:10px;" />
+            <select id="yearFilter" class="form-control" style="display:inline-block; width:150px;">
+                <option value="all">Toutes les années</option>
+                <option value="2026">2026</option>
+                <option value="2025">2025</option>
+            </select>
+        </div>
+    </div>
 </div>
 
 <hr />
@@ -16,21 +28,69 @@
 <div class="students-list" id="studentsListContainer">
     <img src="~/Content/UI-Images/Loading_icon.gif" alt="Chargement en cours..." style="display:block; margin:auto;" />
 </div>
-
 @section Scripts {
-    <script defer>
+    <script>
         $(document).ready(function () {
-            // Utilisation du VRAI nom de la classe
-            let studentsPanel = new AutoRefreshedPanel(
+            // Affiche ou cache la barre de recherche
+            $("#toggleSearchBtn").click(function () {
+                $("#searchPanel").slideToggle();
+            });
+
+            // Fonction de filtre et de surbrillance
+            function applySearch() {
+                let keyword = $("#searchInput").val().toLowerCase();
+                let yearFilter = $("#yearFilter").val();
+
+                // Parcourir chaque étudiant
+                $(".StudentListLayout").each(function () {
+                    let row = $(this);
+                    let textToSearch = row.text().toLowerCase();
+                    let parentDetails = row.closest('details');
+
+                    // Sécurise la recherche de l'année au cas où la balise summary n'est pas encore chargée
+                    let summaryText = parentDetails.find('summary').text();
+                    let cohorteYear = summaryText ? summaryText.replace('Cohorte ', '').trim() : "";
+
+                    let matchKeyword = keyword === "" || textToSearch.indexOf(keyword) > -1;
+                    let matchYear = yearFilter === "all" || cohorteYear === yearFilter;
+
+                    if (matchKeyword && matchYear) {
+                        row.show();
+                        // Application de la surbrillance si un mot clé est tapé
+                        if (keyword !== "") {
+                            let regex = new RegExp("(" + keyword + ")", "gi");
+                            row.find('.studentName, .studentCode').each(function () {
+                                let originalText = $(this).text().replace(/(<mark>|<\/mark>)/igm, "");
+                                $(this).html(originalText.replace(regex, "<mark>$1</mark>"));
+                            });
+                        } else {
+                            // Retire la surbrillance si le champ est vide
+                            row.find('.studentName, .studentCode').each(function () {
+                                $(this).html($(this).text().replace(/(<mark>|<\/mark>)/igm, ""));
+                            });
+                        }
+                    } else {
+                        row.hide();
+                    }
+                });
+            }
+
+            // Déclencher la recherche quand l'usager tape ou change l'année
+            $("#searchInput").on("keyup", applySearch);
+            $("#yearFilter").on("change", applySearch);
+
+            // --- L'APPEL MANQUANT POUR CHARGER LA LISTE ---
+            new AutoRefreshedPanel(
                 "studentsListContainer",
                 "@Url.Action("GetStudents")",
                 5,
                 function () {
-                    // Magie : on restaure l'état des <details> (ouvert/fermé)
-                    // après chaque mise à jour pour ne pas frustrer l'usager !
+                    // 1. Restaure l'état ouvert/fermé des cohortes
                     if (typeof RestoreDetailsState === "function") {
                         RestoreDetailsState();
                     }
+                    // 2. Réapplique la recherche pour ne pas perdre le filtre en cours
+                    applySearch();
                 }
             );
         });

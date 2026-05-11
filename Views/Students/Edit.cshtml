@@ -39,39 +39,20 @@
         </div>
     </details>
 
+    <details id="enrollement_section" open>
+        <summary>Inscriptions: @Registrar.Models.NextSession.Caption</summary>
 
+        @* On utilise l'outil EXACT du professeur *@
+        @Helper.SelectionLists("SelectedCourses", (SelectList)ViewBag.Registrations, (SelectList)ViewBag.Courses)
+    </details>
 
-    <div id="enrollement_section">
-        <div id="inscriptionsContainer">
-            @* Sera chargé par AJAX *@
-        </div>
-        <div id="hiddenSelections"></div>
-    </div>
-
-    @* LE BOUTON REVIENT ICI : *@
     <div style="margin-top: 20px;">
         <input type="submit" value="Enregistrer" class="btn btn-primary" />
         @Html.ActionLink("Annuler", "Index", null, new { @class = "btn btn-default" })
     </div>
-} @* <--- Fermeture du Html.BeginForm() *@
+}
 
-@* LE SECTION SCRIPTS DOIT ÊTRE À L'EXTÉRIEUR DU FORMULAIRE *@
 @section Scripts {
-    <script src="~/Scripts/studentEdit.js"></script>
-    <script>
-    $(document).ready(function () {
-        new AutoRefreshedPanel(
-            "inscriptionsContainer",
-            "/Students/GetInscriptions/@Model.Id",
-            5,
-            function() {
-                // Si vous n'utilisez pas la "Délégation d'événements" (voir ci-dessous),
-                // vous devriez rappeller votre fonction d'initialisation ici.
-                if (typeof initStudentEdit === "function") {
-                    initStudentEdit();
-                }
-            }
-        );
-    });
-    </script>
+    @* On utilise le script EXACT du professeur pour faire marcher ses listes *@
+    <script src="~/Scripts/selections.js"></script>
 }

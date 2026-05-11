@@ -1,6 +1,7 @@
 using Controllers;
 using DAL;
 using Registrar.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
@@ -10,29 +11,31 @@ namespace Registrar.Controllers
     [AccessControl.UserAccess(Access.View)]
     public class StudentsController : Controller
     {
-        private StudentsRepository Students = new StudentsRepository();
-        private CoursesRepository Courses = new CoursesRepository();
+        private DAL.Repository<Student> Students => DB.Students;
+        private DAL.Repository<Course> Courses => DB.Courses;
 
         // GET: Students/Edit/5
+        // GET: Students/Edit/5
         [AccessControl.UserAccess(Access.Write)]
-        public ActionResult Edit(int id) // <-- Changé pour int
+        public ActionResult Edit(int id)
         {
             Student student = Students.Get(id);
             if (student == null) return HttpNotFound();
 
-            // Filtrer les cours selon la session courante définie par le prof
             var validSessions = NextSession.ValidSessions;
+            var allCourses = Courses.ToList().Where(c => validSessions.Contains(c.Session)).OrderBy(c => c.Code).ToList();
 
-            ViewBag.CurrentCourses = Courses.ToList()
-                .Where(c => c.Inscriptions.Contains(id) && validSessions.Contains(c.Session))
-                .OrderBy(c => c.Code).ToList();
+            // On trouve les cours de l'étudiant
+            var registeredCourses = allCourses.Where(c => c.Inscriptions.Contains(id)).ToList();
 
-            ViewBag.AvailableCourses = Courses.ToList()
-                .Where(c => !c.Inscriptions.Contains(id) && validSessions.Contains(c.Session))
-                .OrderBy(c => c.Code).ToList();
+            // UTILISATION DE SELECTLISTUTILITIES (Obligatoire pour l'outil du prof)
+            ViewBag.Courses = SelectListUtilities<Course>.Convert(allCourses);
+            ViewBag.Registrations = SelectListUtilities<Course>.Convert(registeredCourses);
 
             return View(student);
         }
+
+        // POST: Students/Edit/5
         [HttpPost]
         [AccessControl.UserAccess(Access.Write)]
         public ActionResult Edit(Student student, List<int> SelectedCourses)
@@ -41,9 +44,9 @@ namespace Registrar.Controllers
             {
                 Students.Update(student);
 
-                // Mise à jour des inscriptions
-                var currentSessions = NextSession.ValidSessions;
-                var currentSessionCourses = Courses.ToList().Where(c => currentSessions.Contains(c.Session)).ToList();
+                // Mise à jour de la relation dans les cours
+                var validSessions = NextSession.ValidSessions;
+                var currentSessionCourses = Courses.ToList().Where(c => validSessions.Contains(c.Session)).ToList();
 
                 foreach (var course in currentSessionCourses)
                 {
@@ -64,19 +67,9 @@ namespace Registrar.Controllers
                 return RedirectToAction("Index");
             }
 
-            // --- AJOUTER CECI ICI ---
-            // Si on arrive ici, c'est que le formulaire est invalide. 
-            // On doit impérativement recharger les listes avant de réafficher la page !
-            var validSessions = NextSession.ValidSessions;
-
-            ViewBag.CurrentCourses = Courses.ToList()
-                .Where(c => c.Inscriptions.Contains(student.Id) && validSessions.Contains(c.Session))
-                .OrderBy(c => c.Code).ToList();
-
-            ViewBag.AvailableCourses = Courses.ToList()
-                .Where(c => !c.Inscriptions.Contains(student.Id) && validSessions.Contains(c.Session))
-                .OrderBy(c => c.Code).ToList();
-            // ------------------------
+            var allCoursesValid = Courses.ToList().Where(c => NextSession.ValidSessions.Contains(c.Session)).OrderBy(c => c.Code).ToList();
+            ViewBag.Courses = SelectListUtilities<Course>.Convert(allCoursesValid);
+            ViewBag.Registrations = SelectListUtilities<Course>.Convert(allCoursesValid.Where(c => c.Inscriptions.Contains(student.Id)).ToList());
 
             return View(student);
         }
@@ -117,6 +110,48 @@ namespace Registrar.Controllers
                 return PartialView("_Inscriptions");
             }
             return null;
+        }
+
+        [AccessControl.UserAccess(Access.Write)]
+        public ActionResult Create()
+        {
+            return View(new Student());
+        }
+
+      
+        [HttpPost]
+        [AccessControl.UserAccess(Access.Write)]
+        public ActionResult Create(Student student)
+        {
+            // On retire le code des erreurs de validation puisqu'on va le générer
+            ModelState.Remove("Code");
+
+            if (ModelState.IsValid)
+            {
+                // Génération automatique du code (Année + 6 chiffres aléatoires)
+                Random rnd = new Random();
+                student.Code = DateTime.Now.Year.ToString() + rnd.Next(100000, 999999).ToString();
+
+                Students.Add(student);
+                return RedirectToAction("Index");
+            }
+            return View(student);
+        }
+
+        [AccessControl.UserAccess(Access.View)]
+        public ActionResult Details(int id)
+        {
+            Student student = Students.Get(id);
+            if (student == null) return HttpNotFound();
+
+            // On récupère la liste des cours auxquels l'étudiant est inscrit
+            ViewBag.EnrolledCourses = Courses.ToList()
+                .Where(c => c.Inscriptions.Contains(id))
+                .OrderBy(c => c.Session)
+                .ThenBy(c => c.Code)
+                .ToList();
+
+            return View(student);
         }
     }
 }

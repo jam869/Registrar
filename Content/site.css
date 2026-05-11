@@ -1,4 +1,4 @@
-
+    
 .unselected {
     text-decoration: none;
     color: lightgray;
@@ -124,3 +124,51 @@ summary {
 .highlight {
     background-color: yellow;
 }
+
+/* --- CORRECTIONS PFI STRICTES --- */
+.StudentListLayout, .TeacherListLayout, .CourseListLayout {
+    padding: 8px;
+    border-bottom: 1px solid #ddd;
+    display: flex;
+    align-items: center;
+}
+
+    .StudentListLayout a, .TeacherListLayout a, .CourseListLayout a {
+        text-decoration: none;
+        color: black;
+        display: flex;
+        width: 100%;
+    }
+
+.studentCode, .teacherCode, .courseCode {
+    color: #0066cc; /* Le bleu exact des numéros d'admission */
+    font-weight: bold;
+    min-width: 110px; /* Aligne parfaitement les noms qui suivent */
+    margin-right: 15px;
+}
+
+.studentName, .teacherName, .courseName {
+    color: #333;
+}
+
+/* Style des en-têtes de détails (Nom en gros) */
+.details-header {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    border-bottom: 2px solid #0066cc;
+    padding-bottom: 5px;
+}
+
+/* Icônes dans les vues détails */
+.detail-row {
+    margin-bottom: 10px;
+    font-size: 16px;
+}
+
+    .detail-row i {
+        width: 25px;
+        color: #555;
+        text-align: center;
+        margin-right: 10px;
+    }

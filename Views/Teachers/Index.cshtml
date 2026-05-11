@@ -1,0 +1,33 @@
+@{
+    ViewBag.Title = "Liste des professeurs";
+}
+
+<div class="header-container">
+    @if (Registrar.Models.User.ConnectedUser != null && Registrar.Models.User.ConnectedUser.CanWrite)
+    {
+        <a href="@Url.Action("Create")" class="icon fa fa-plus-circle" title="Ajouter un professeur"></a>
+    }
+</div>
+
+<hr />
+
+<div id="teachersListContainer">
+    <img src="~/Content/UI-Images/Loading_icon.gif" style="display:block; margin:auto;" />
+</div>
+
+@section Scripts {
+    <script defer>
+        $(document).ready(function () {
+            new AutoRefreshedPanel(
+                "teachersListContainer",
+                "@Url.Action("GetTeachers")", // <--- LE PROBLÈME ÉTAIT ICI
+                5,
+                function () {
+                    if (typeof RestoreDetailsState === "function") {
+                        RestoreDetailsState();
+                    }
+                }
+            );
+        });
+    </script>
+}

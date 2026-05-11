@@ -57,28 +57,26 @@ function SummaryHandling() {
     })
 }
 function RestoreDetailsState() {
-    //////////////////////////////////////////////////////////
-    /// Install event handler
-    //////////////////////////////////////////////////////////
-    $("details").off();
+    // Désattache les anciens événements pour éviter les doublons
+    $("details").off('toggle');
+
+    // Attache l'événement de bascule
     $("details").on('toggle', function () {
         let details_dom = $(this)[0];
         if (details_dom != undefined) {
-            // Save details state
+            // Sauvegarde l'état dans la mémoire du navigateur
             localStorage.setItem(details_dom.id, details_dom.open);
         }
-    })
-    
-    // Restore state of each details tags
+    });
+
+    // Restaure l'état de chaque balise details
     for (let i = 0; i < localStorage.length; i++) {
         const key = localStorage.key(i);
-        // target only keys that contain "details" string
         if (key.indexOf("details") > -1) {
             let details_dom = $("#" + key)[0];
-            if (details_dom != undefined)
-                // all values in localstorage are stored as string
-                details_dom.open = localStorage.getItem(key) == "true";
-            let i = 0;
+            if (details_dom != undefined) {
+                details_dom.open = (localStorage.getItem(key) == "true");
+            }
         }
     }
 }

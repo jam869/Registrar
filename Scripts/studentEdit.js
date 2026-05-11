@@ -32,11 +32,11 @@
     });
 
     // 5. Avant la soumission : on prépare les données pour le C#
+    // 5. Avant la soumission : on s'assure d'envoyer les cours !
     $(document).on("submit", "form", function () {
-        $("#hiddenSelections").empty();
-        $("#CurrentCourses option").each(function () {
-            // Correction de la syntaxe de l'input caché
-            $("#hiddenSelections").append('<input type="hidden" name="SelectedCourses" value="' + $(this).val() + '" />');
-        });
+        // On sélectionne toutes les options de la liste "Cours actuels"
+        // Le navigateur va envoyer automatiquement ceux qui sont "selected"
+        $("#CurrentCourses option").prop("selected", true);
     });
+    
 });

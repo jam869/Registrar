@@ -1,0 +1,42 @@
+@model Registrar.Models.Teacher
+
+@{ ViewBag.Title = "Modifier Professeur"; }
+
+<h2>Modifier : @Model.FirstName @Model.LastName</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.Id)
+    @Html.HiddenFor(m => m.Code)
+
+    <div class="form-grid">
+        <div class="image-column">
+            @Helper.ImageUploader("Avatar", Model.Avatar, "Changer la photo")
+        </div>
+
+        <div class="info-column">
+            @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+
+            @Html.EditorFor(m => m.FirstName)
+            @Html.EditorFor(m => m.LastName)
+            @Html.EditorFor(m => m.Phone)
+
+            @* On utilise TextBoxFor pour la date comme pour les étudiants *@
+            @Html.TextBoxFor(m => m.StartDate, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
+            @Html.ValidationMessageFor(m => m.StartDate)
+
+            <div style="margin-top: 20px;">
+                <input type="submit" value="Enregistrer" class="btn btn-primary" />
+                @Html.ActionLink("Annuler", "Index", null, new { @class = "btn btn-default" })
+                <a href="@Url.Action("Delete", new { id = Model.Id })"
+                   class="btn btn-danger"
+                   onclick="return confirm('Supprimer ce professeur ?');">Supprimer</a>
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    <script src="~/Scripts/image-control.js"></script>
+}

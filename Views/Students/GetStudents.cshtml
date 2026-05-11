@@ -1,10 +1,29 @@
 @model IEnumerable<Registrar.Models.Student>
 
-@foreach (var item in Model)
+@{
+    // Récupère les années uniques de tous les étudiants, en ordre décroissant
+    var yearsList = Model.Select(s => s.Year).Distinct().OrderByDescending(i => i);
+}
+
+@foreach (int year in yearsList)
 {
-    <div class="student-item">
-        <a href="@Url.Action("Edit", new { id = item.Id })" class="student-link">
-            @item.Code - @item.FirstName @item.LastName
-        </a>
-    </div>
+    var students = Model.Where(s => s.Year == year);
+    if (students.Count() > 0)
+    {
+        <details id="students_details_@year" open>
+            <summary>Cohorte @year</summary>
+
+            @foreach (var item in students)
+            {
+                <div class="StudentListLayout" style="padding: 5px; border-bottom: 1px solid #eee;">
+                    <a href="@Url.Action("Edit", new { id = item.Id })" style="text-decoration:none; color:black;">
+                        <div style="display: flex">
+                            <span class="studentCode" style="font-weight:bold; margin-right: 10px;">@item.Code</span>
+                            <div class="studentName">@item.LastName @item.FirstName</div>
+                        </div>
+                    </a>
+                </div>
+            }
+        </details>
+    }
 }

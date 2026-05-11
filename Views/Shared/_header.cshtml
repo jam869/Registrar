@@ -20,8 +20,9 @@
             <a href="@Url.Action("Index", "Courses")" class="icon fa fa-book" title="Cours"></a>
             <a href="@Url.Action("Index", "Teachers")" class="icon fa fa-chalkboard-teacher" title="Professeurs"></a>
 
-            <a href="@Url.Action("EditProfil", "Accounts")" title="Modifier le profil">
+            <a href="@Url.Action("EditProfil", "Accounts")" title="Modifier le profil" style="position:relative; display:inline-block; margin-right:15px;">
                 @Helper.AvatarUser(connectedUser, "UserSmallAvatar")
+                <img src="~/Content/UI-Images/OnLine.png" title="En ligne" style="position:absolute; bottom:0; right:-5px; width:12px; height:12px;" />
             </a>
 
             if (connectedUser.IsAdmin)

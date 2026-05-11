@@ -1,0 +1,53 @@
+@model Registrar.Models.Student
+
+@{ ViewBag.Title = "Nouvel Étudiant"; }
+
+<h2>Inscrire un nouvel étudiant</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        @* CHANGEZ LE TRUE POUR FALSE ICI : *@
+        @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+
+     
+
+        <div class="form-group">
+            <label>Prénom</label>
+            @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control", placeholder = "ex: Jean" } })
+            @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="form-group">
+            <label>Nom de famille</label>
+            @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control", placeholder = "ex: Tremblay" } })
+            @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="form-group">
+            <label>Date de naissance</label>
+            @Html.TextBoxFor(m => m.BirthDate, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
+            @Html.ValidationMessageFor(model => model.BirthDate, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="form-group">
+            <label>Courriel</label>
+            @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control", placeholder = "exemple@domaine.com" } })
+            @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="form-group">
+            <label>Téléphone</label>
+            @* Notez l'ajout de la classe 'Phone' pour activer votre masque de saisie (si configuré) *@
+            @Html.EditorFor(model => model.Phone, new { htmlAttributes = new { @class = "form-control Phone", placeholder = "(514) 123-4567" } })
+            @Html.ValidationMessageFor(model => model.Phone, "", new { @class = "text-danger" })
+        </div>
+
+        <div style="margin-top: 20px;">
+            <input type="submit" value="Créer l'étudiant" class="btn btn-primary" />
+            @Html.ActionLink("Annuler", "Index", null, new { @class = "btn btn-default" })
+        </div>
+    </div>
+}
