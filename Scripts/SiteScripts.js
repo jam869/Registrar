@@ -183,6 +183,23 @@ $(document).ready(function () {
         }
     });
 
+
+    $(document).ready(function () {
+        $("#menu-toggle").click(function () {
+            $("#side-menu").addClass("open");
+        });
+
+        $("#menu-close").click(function () {
+            $("#side-menu").removeClass("open");
+        });
+
+        // Fermer si on clique à l'extérieur
+        $(document).click(function (e) {
+            if (!$(e.target).closest('#side-menu, #menu-toggle').length) {
+                $("#side-menu").removeClass("open");
+            }
+        });
+    });
     // Gérer le Ctrl+Clic pour tout ouvrir/fermer
     $("summary").click(function (e) {
         if (e.ctrlKey) {

@@ -62,3 +62,47 @@
     grid-template-columns: auto 24px !important;
     align-items: center;
 }
+
+
+.layout-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #222;
+    color: white;
+    padding: 0 20px;
+    height: 60px;
+}
+
+.layout-header-nav a {
+    color: #bbb;
+    text-decoration: none;
+    margin: 0 15px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+    .layout-header-nav a.active {
+        color: white;
+        border-bottom: 2px solid white;
+    }
+
+.layout-header-commands {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+    .layout-header-commands .icon {
+        font-size: 20px;
+        cursor: pointer;
+        color: white;
+    }
+
+.online-status {
+    position: absolute;
+    bottom: 0;
+    right: -5px;
+    width: 12px;
+    height: 12px;
+}

@@ -16,11 +16,9 @@
             @foreach (var item in students)
             {
                 <div class="StudentListLayout" style="padding: 5px; border-bottom: 1px solid #eee;">
-                    <a href="@Url.Action("Edit", new { id = item.Id })" style="text-decoration:none; color:black;">
-                        <div style="display: flex">
-                            <span class="studentCode" style="font-weight:bold; margin-right: 10px;">@item.Code</span>
-                            <div class="studentName">@item.LastName @item.FirstName</div>
-                        </div>
+                    <a href="@Url.Action("Details", new { id = item.Id })">
+                        <span class="studentCode">@item.Code</span>
+                        <div class="studentName">@item.LastName @item.FirstName</div>
                     </a>
                 </div>
             }

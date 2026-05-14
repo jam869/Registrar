@@ -1,12 +1,7 @@
-@{
-    ViewBag.Title = "Liste des professeurs";
-}
+
 
 <div class="header-container">
-    @if (Registrar.Models.User.ConnectedUser != null && Registrar.Models.User.ConnectedUser.CanWrite)
-    {
-        <a href="@Url.Action("Create")" class="icon fa fa-plus-circle" title="Ajouter un professeur"></a>
-    }
+
 </div>
 
 <hr />

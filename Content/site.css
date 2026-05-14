@@ -172,3 +172,94 @@ summary {
         text-align: center;
         margin-right: 10px;
     }
+
+/* --- STYLE EXACT N. CHOUROT --- */
+.StudentListLayout, .TeacherListLayout, .CourseListLayout {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    align-items: center;
+    transition: background 0.2s;
+}
+
+    .StudentListLayout:hover {
+        background-color: #f5f5f5;
+    }
+
+.studentCode, .teacherCode, .courseCode {
+    color: #0066cc !important; /* Bleu admission */
+    font-weight: bold;
+    min-width: 110px;
+    display: inline-block;
+}
+
+.studentName, .teacherName, .courseName {
+    color: #333;
+    font-size: 1.1em;
+}
+
+/* Style des icônes dans les pages détails */
+.detail-row {
+    margin-bottom: 12px;
+    font-size: 1.1em;
+    display: flex;
+    align-items: center;
+}
+
+    .detail-row i {
+        width: 30px;
+        color: #666;
+        font-size: 1.2em;
+        text-align: center;
+        margin-right: 15px;
+    }
+
+.details-header {
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    border-bottom: 3px solid #0066cc;
+    padding-bottom: 10px;
+}
+.layout-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #222;
+    color: white;
+    padding: 0 20px;
+    height: 60px;
+}
+
+.layout-header-nav a {
+    color: #bbb;
+    text-decoration: none;
+    margin: 0 15px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+    .layout-header-nav a.active {
+        color: white;
+        border-bottom: 2px solid white;
+    }
+
+.layout-header-commands {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+    .layout-header-commands .icon {
+        font-size: 20px;
+        cursor: pointer;
+        color: white;
+    }
+
+.online-status {
+    position: absolute;
+    bottom: 0;
+    right: -5px;
+    width: 12px;
+    height: 12px;
+}

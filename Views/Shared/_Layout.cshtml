@@ -11,7 +11,28 @@
     @Styles.Render("~/Content/css")
 </head>
 <body>
+    <div id="side-menu" class="side-menu">
+        <div class="side-menu-header">
+            <i class="fa fa-times" id="menu-close"></i>
+        </div>
+        <div class="side-menu-content">
+            @if (Registrar.Models.User.ConnectedUser != null)
+            {
+                <a href="@Url.Action("Index", "Students")"><i class="fa fa-user-graduate"></i> Étudiants</a>
+                <a href="@Url.Action("Index", "Courses")"><i class="fa fa-book"></i> Cours</a>
+                <a href="@Url.Action("Index", "Teachers")"><i class="fa fa-chalkboard-teacher"></i> Profs</a>
+                <hr />
+                <a href="@Url.Action("EditProfil", "Accounts")"><i class="fa fa-user-circle"></i> Mon profil</a>
 
+                if (Registrar.Models.User.ConnectedUser.IsAdmin)
+                {
+                    <a href="@Url.Action("ManageUsers", "Accounts")"><i class="fa fa-users-cog"></i> Gérer les usagers</a>
+                }
+                <hr />
+                <a href="@Url.Action("Logout", "Accounts")"><i class="fa fa-sign-out-alt"></i> Déconnexion</a>
+            }
+        </div>
+    </div>
     <div class="page">
         @{
             Html.RenderPartial("_header");
@@ -22,13 +43,14 @@
                 @RenderBody()
             </div>
         </div>
-
-        <div id="footerPanel" class="section roundedBorder footerPanel">
-            &copy; @DateTime.Now.Year - Registrar
-            <img src="/updatingView.gif"
-                 style="width:24px; display:none"
-                 id="updatingView"
-                 title="Rafraichissement de la vue" />
+        <div id="footerPanel" class="footerPanel">
+            
+            <span style="margin-left: 20px;">
+                Session courante:
+                <a href="@Url.Action("ChangeNextSession", "Accounts")" style="color: white; font-weight: bold; text-decoration: underline;">
+                    @Registrar.Models.NextSession.Caption
+                </a>
+            </span>
         </div>
 
     </div>

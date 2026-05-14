@@ -4,16 +4,10 @@
     @foreach (var item in Model)
     {
         <div class="teacher-card">
-            <a href="@Url.Action("Edit", new { id = item.Id })" class="teacher-link">
-                <div class="teacher-avatar">
-                    @Helper.Image(item.Avatar, "UserMediumAvatar")
-                </div>
-                <div class="teacher-info">
-                    <strong>@item.FirstName @item.LastName</strong><br />
-                    <small>@item.Code</small><br />
-                    <span>@item.Phone</span>
-                </div>
-            </a>
+           <a href="@Url.Action("Details", new { id = item.Id })">
+               <span class="teacherCode">@item.Code</span>
+               <div class="teacherName">@item.LastName @item.FirstName</div>
+           </a>
         </div>
     }
 </div>

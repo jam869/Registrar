@@ -1,16 +1,9 @@
 @model IEnumerable<Registrar.Models.Student>
 
-@{
-    ViewBag.Title = "Liste des étudiants";
-}
 
 <div class="header-container">
-    @if (Registrar.Models.User.ConnectedUser != null && Registrar.Models.User.ConnectedUser.CanWrite)
-    {
-        <a href="@Url.Action("Create")" class="icon fa fa-plus-circle" title="Ajouter un étudiant"></a>
-    }
+    
     <div class="search-bar-container" style="margin-bottom: 15px;">
-        <button id="toggleSearchBtn" class="btn btn-default"><i class="fa fa-search"></i> Rechercher</button>
 
         <div id="searchPanel" style="display:none; margin-top:10px; background:#f9f9f9; padding:10px; border-radius:5px;">
             <input type="text" id="searchInput" class="form-control" placeholder="Rechercher par nom ou code..." style="display:inline-block; width:200px; margin-right:10px;" />
@@ -30,11 +23,12 @@
 </div>
 @section Scripts {
     <script>
-        $(document).ready(function () {
-            // Affiche ou cache la barre de recherche
-            $("#toggleSearchBtn").click(function () {
-                $("#searchPanel").slideToggle();
-            });
+       $(document).ready(function () {
+    $("#toggleSearchBtn").click(function () {
+        $("#searchPanel").slideToggle();
+    });
+    
+ 
 
             // Fonction de filtre et de surbrillance
             function applySearch() {

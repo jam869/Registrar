@@ -143,7 +143,7 @@ namespace Registrar.Controllers
         {
             Student student = Students.Get(id);
             if (student == null) return HttpNotFound();
-
+            ViewBag.Title = "Étudiants - Détails";
             // On récupère la liste des cours auxquels l'étudiant est inscrit
             ViewBag.EnrolledCourses = Courses.ToList()
                 .Where(c => c.Inscriptions.Contains(id))
@@ -152,6 +152,6 @@ namespace Registrar.Controllers
                 .ToList();
 
             return View(student);
-        }
+        }   
     }
 }

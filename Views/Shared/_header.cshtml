@@ -1,40 +1,37 @@
 ﻿@{
     var connectedUser = Registrar.Models.User.ConnectedUser;
+    string action = ViewContext.RouteData.Values["action"].ToString();
+    string controller = ViewContext.RouteData.Values["controller"].ToString();
 }
+
 <div class="layout-header">
-    <a href="@Url.Action("Index", "Students")" style="text-decoration:none;">
-        <div class="layout-header-app-name">
-            <img src="~/WebApp.png" class="appLogo" alt="Logo" style="height:40px; margin-right:10px;" />
-            <span style="color:white; font-size: 24px; font-weight: bold;">Registrar</span>
-        </div>
-    </a>
-
-    <div class="layout-header-view-name">
-        @ViewBag.Title
+    <div class="header-left">
+        @* Le bouton Hamburger pour le menu latéral *@
+        <i class="icon fa fa-bars" id="menu-toggle" title="Menu"></i>
+        <span class="header-title">@ViewBag.Title</span>
     </div>
 
-    <div class="layout-header-menu">
-        @if (connectedUser != null)
-        {
-            <a href="@Url.Action("Index", "Students")" class="icon fa fa-user-graduate" title="Étudiants"></a>
-            <a href="@Url.Action("Index", "Courses")" class="icon fa fa-book" title="Cours"></a>
-            <a href="@Url.Action("Index", "Teachers")" class="icon fa fa-chalkboard-teacher" title="Professeurs"></a>
-
-            <a href="@Url.Action("EditProfil", "Accounts")" title="Modifier le profil" style="position:relative; display:inline-block; margin-right:15px;">
-                @Helper.AvatarUser(connectedUser, "UserSmallAvatar")
-                <img src="~/Content/UI-Images/OnLine.png" title="En ligne" style="position:absolute; bottom:0; right:-5px; width:12px; height:12px;" />
-            </a>
-
-            if (connectedUser.IsAdmin)
+    @if (connectedUser != null)
+    {
+        <div class="header-right">
+            @if (action == "Index")
             {
-                <a href="@Url.Action("ManageUsers", "Accounts")" class="icon fa fa-users-cog" title="Gérer les usagers"></a>
+                <i id="toggleSearchBtn" class="icon fa fa-search" title="Rechercher"></i>
+                if (connectedUser.CanWrite)
+                {
+                    <a href="@Url.Action("Create")" class="icon fa fa-plus-circle" title="Ajouter"></a>
+                }
             }
+            else if (action == "Details" || action == "Edit" || action == "Create")
+            {
+                @* Bouton Retour (Liste) *@
+                <a href="@Url.Action("Index")" class="icon fa fa-list-ul" title="Retour à la liste"></a>
 
-            <a href="@Url.Action("Logout", "Accounts")" class="icon fa fa-sign-out-alt" title="Déconnexion"></a>
-        }
-        else
-        {
-            <a href="@Url.Action("Login", "Accounts")" class="icon fa fa-sign-in-alt" title="Se connecter"></a>
-        }
-    </div>
+                if (action == "Details" && connectedUser.CanWrite)
+                {
+                    <a href="@Url.Action("Edit", new { id = ViewContext.RouteData.Values["id"] })" class="icon fa fa-edit" title="Modifier"></a>
+                }
+            }
+        </div>
+    }
 </div>

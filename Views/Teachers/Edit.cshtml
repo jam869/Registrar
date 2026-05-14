@@ -26,13 +26,7 @@
             @Html.TextBoxFor(m => m.StartDate, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
             @Html.ValidationMessageFor(m => m.StartDate)
 
-            <div style="margin-top: 20px;">
-                <input type="submit" value="Enregistrer" class="btn btn-primary" />
-                @Html.ActionLink("Annuler", "Index", null, new { @class = "btn btn-default" })
-                <a href="@Url.Action("Delete", new { id = Model.Id })"
-                   class="btn btn-danger"
-                   onclick="return confirm('Supprimer ce professeur ?');">Supprimer</a>
-            </div>
+         
         </div>
     </div>
 }

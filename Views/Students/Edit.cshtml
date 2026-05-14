@@ -46,10 +46,7 @@
         @Helper.SelectionLists("SelectedCourses", (SelectList)ViewBag.Registrations, (SelectList)ViewBag.Courses)
     </details>
 
-    <div style="margin-top: 20px;">
-        <input type="submit" value="Enregistrer" class="btn btn-primary" />
-        @Html.ActionLink("Annuler", "Index", null, new { @class = "btn btn-default" })
-    </div>
+  
 }
 
 @section Scripts {
