@@ -1,6 +1,9 @@
 ﻿@{
     var connectedUser = Registrar.Models.User.ConnectedUser;
     bool userConnected = connectedUser != null;
+    bool userIsAdmin = userConnected && connectedUser.IsAdmin;
+    bool userCanWrite = userConnected && connectedUser.CanWrite;
+
     string controller = ViewContext.RouteData.Values["controller"].ToString().ToLower();
     string action = ViewContext.RouteData.Values["action"].ToString().ToLower();
     var routeId = ViewContext.RouteData.Values["id"];
@@ -14,21 +17,6 @@
         {
             if (action == "index")
             {
-                @* Menu Hamburger : UNIQUEMENT dans les Index *@
-                <div class="dropdown">
-                    <div data-bs-toggle="dropdown" aria-expanded="false" style="cursor: pointer; margin-right:10px;">
-                        <i class="cmdIcon fa fa-bars" title="Menu"></i>
-                    </div>
-                    <div class="dropdown-menu dropdown-menu-start noselect" style="width: 260px;">
-                        <a href="@Url.Action("EditProfil", "Accounts")" class="dropdown-item item-layout">
-                            <i class="menuIcon fa fa-address-card"></i><span class="flexItem">Profil...</span>
-                        </a>
-                        <a href="@Url.Action("Logout", "Accounts")" class="dropdown-item item-layout">
-                            <i class="menuIcon fa fa-sign-out-alt"></i><span class="flexItem">Déconnexion...</span>
-                        </a>
-                    </div>
-                </div>
-
                 <div class="header-nav-container">
                     <a href="@Url.Action("Index", "Students")" class="@(controller == "students" ? "active-nav" : "")">Étudiants</a>
                     <a href="@Url.Action("Index", "Courses")" class="@(controller == "courses" ? "active-nav" : "")">Cours</a>
@@ -48,22 +36,51 @@
             <div class="menu">
                 @if (action == "index")
                 {
-                    <a href="/@controller/Create" class="cmdIcon fa fa-plus-circle" title="Ajouter..."></a>
+                    if (userCanWrite)
+                    {
+                        <a href="/@controller/Create" class="cmdIcon fa fa-plus-circle" title="Ajouter..."></a>
+                    }
                     <i class="cmdIcon fa fa-search" id="toggleSearchBtn" title="Recherche..."></i>
                 }
                 else if (action == "details")
                 {
-                    <a href="/@controller/Edit/@routeId" class="cmdIcon fa fa-edit" title="Modifier..."></a>
-                    @* Corbeille Grise/Bleue (pas rouge) *@
-                    <i class="cmdIcon fa fa-trash-can" title="Effacer" onclick="bootboxConfirmDelete('/@controller/Delete/@routeId', '@controller')" style="color: #555;"></i>
-                    @* Le X : Carré bleu avec X blanc *@
-                    <a href="/@controller/Index" class="btn-close-square" title="Retour"><i class="fa fa-xmark"></i></a>
+                    if (userCanWrite)
+                    {
+                        <a href="/@controller/Edit/@routeId" class="cmdIcon fa fa-edit" title="Modifier..."></a>
+                        <a href="javascript:void(0)"
+                           class="cmdIcon fa fa-trash-can"
+                           title="Effacer"
+                           onclick="bootboxConfirmDelete('/@controller/Delete/@routeId', '@controller')"
+                           style="font-size: 24px; color: #d9534f; text-decoration:none;">
+                        </a> }
+                    <a href="/@controller/Index" class="cmdIcon fa fa-times" title="Retour"></a>
                 }
                 else if (action == "create" || action == "edit")
                 {
                     <i class="cmdIcon fa fa-check" title="Sauvegarder" onclick="$('form').submit()"></i>
-                    <a href="/@controller/Index" class="btn-close-square" title="Annuler"><i class="fa fa-xmark"></i></a>
+                    <a href="/@controller/Index" class="cmdIcon fa fa-times" title="Annuler"></a>
                 }
+            </div>
+
+            <div class="dropdown" style="display:inline-block;">
+                <div data-bs-toggle="dropdown" aria-expanded="false" style="cursor: pointer; padding-left: 10px;">
+                    <i class="cmdIcon fa fa-bars" title="Menu"></i>
+                </div>
+                <div class="dropdown-menu dropdown-menu-end noselect" style="width: 260px;">
+                    <a href="@Url.Action("EditProfil", "Accounts")" class="dropdown-item item-layout">
+                        <i class="menuIcon fa fa-address-card"></i><span class="flexItem">Profil...</span>
+                    </a>
+                    <a href="@Url.Action("Logout", "Accounts")" class="dropdown-item item-layout">
+                        <i class="menuIcon fa fa-sign-out-alt"></i><span class="flexItem">Déconnexion...</span>
+                    </a>
+                    @if (userIsAdmin)
+                    {
+                        <div class="dropdown-divider"></div>
+                        <a href="@Url.Action("ManageUsers", "Accounts")" class="dropdown-item item-layout">
+                            <i class="menuIcon fa fa-users-cog"></i><span class="flexItem">Gestion des usagers...</span>
+                        </a>
+                    }
+                </div>
             </div>
         }
     </div>
