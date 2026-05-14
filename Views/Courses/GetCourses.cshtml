@@ -1,12 +1,27 @@
 @model IEnumerable<Registrar.Models.Course>
 
+@{
+    // Récupère les numéros de sessions uniques (1, 2, 3...)
+    var sessions = Model.Select(c => c.Session).Distinct().OrderBy(s => s);
+}
 
-@foreach (var item in Model)
+@foreach (var session in sessions)
 {
-    <div class="course-item" style="border-bottom: 1px solid #ccc; padding: 10px;">
-        <a href="@Url.Action("Edit", new { id = item.Id })" style="text-decoration:none; color:black;">
-            <strong>[@item.Code]</strong> @item.Title <br />
-            <small>Session : @item.Session</small>
-        </a>
-    </div>
+    var courses = Model.Where(c => c.Session == session);
+    if (courses.Any())
+    {
+        <details id="courses_details_@session" open>
+            <summary>Session @session</summary>
+            @foreach (var item in courses)
+            {
+                <div class="CoursesListLayout">
+                    @* Le clic mène maintenant à la page Détails, par souci de cohérence *@
+                    <a href="@Url.Action("Details", new { id = item.Id })">
+                        <span class="courseCode">@item.Code</span>
+                        <span class="courseName">@item.Title</span>
+                    </a>
+                </div>
+            }
+        </details>
+    }
 }

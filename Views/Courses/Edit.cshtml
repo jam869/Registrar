@@ -1,41 +1,45 @@
 @model Registrar.Models.Course
 
-@{ ViewBag.Title = "Modifier le cours"; }
-
-<h2>Modifier le cours : @Model.Code</h2>
+@* Le titre dans le header blanc est géré par le contrôleur : ViewBag.Title = "Cours - Modification" *@
 
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
     @Html.HiddenFor(model => model.Id)
-    @Html.HiddenFor(model => model.Code)
 
-    <div class="form-horizontal">
+    <div style="max-width: 800px; margin: auto;">
         @Html.ValidationSummary(false, "", new { @class = "text-danger" })
 
-        <div class="form-group">
-            <label>Titre du cours</label>
-            @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
-        </div>
+        <details id="info_section" open>
+            <summary>Informations - @Model.Code</summary>
+            <fieldset style="border:none !important; padding: 15px !important;">
 
-        <div class="form-group">
-            <label>Session (1 à 6)</label>
-            @Html.EditorFor(model => model.Session, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.Session, "", new { @class = "text-danger" })
-        </div>
+                <label>Session</label>
+                @Html.EditorFor(model => model.Session, new { htmlAttributes = new { @class = "form-control", min = "1", max = "6" } })
+                @Html.ValidationMessageFor(model => model.Session, "", new { @class = "text-danger" })
 
-        @* --- LA SECTION DES ÉTUDIANTS INSCRITS EST ICI --- *@
-        <details id="enrollement_section" open style="margin-top:20px;">
-            <summary>Étudiants inscrits dans ce cours</summary>
-            @Helper.SelectionLists("SelectedStudents", (SelectList)ViewBag.Enrolled, (SelectList)ViewBag.Students)
+                <label>Sigle</label>
+                @Html.EditorFor(model => model.Code, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Code, "", new { @class = "text-danger" })
+
+                <label>Titre du cours</label>
+                @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+            </fieldset>
         </details>
 
-      
+        <details id="enroll_section" open style="margin-top: 20px;">
+            @* Affiche par exemple : Inscriptions : Session Automne 2026 *@
+            <summary>Inscriptions : Session @Registrar.Models.NextSession.Caption</summary>
+            <fieldset style="border:none !important; padding: 15px !important;">
+                @Helper.SelectionLists("SelectedStudents", (SelectList)ViewBag.Enrolled, (SelectList)ViewBag.Students)
+            </fieldset>
+        </details>
     </div>
 }
 
 @section Scripts {
-    @* OBLIGATOIRE POUR QUE L'OUTIL DE SÉLECTION FONCTIONNE *@
+    @Scripts.Render("~/bundles/jqueryval")
+    @* Nécessaire pour le fonctionnement de la double liste *@
     <script src="~/Scripts/selections.js"></script>
 }

@@ -1,0 +1,58 @@
+@model Registrar.Models.Course
+
+@{
+    ViewBag.Title = "Cours - Détails";
+}
+
+<div class="details-header" style="border-bottom: 2px solid #0066cc; margin-bottom: 25px; padding-bottom: 10px;">
+    @* Sigle du cours en haut *@
+    <div style="font-size: 0.8em; font-weight: normal; color: #000; margin-bottom: 5px;">
+        @Model.Code
+    </div>
+    @* Session et Titre en dessous (Moins gros) *@
+    <div style="font-size: 0.8em; color: #000; font-weight: normal;">
+        Session @Model.Session
+    </div>
+    <div style="font-size: 0.8em; color: #000; font-weight: normal;">
+       @Model.Title
+    </div>
+</div>
+
+<h3 style="margin-top: 30px; font-size: 1.3em; font-weight: bold;">Inscriptions</h3>
+
+@if (ViewBag.GroupedInscriptions != null)
+{
+    foreach (var group in (IEnumerable<IGrouping<int, Registrar.Models.Student>>)ViewBag.GroupedInscriptions)
+    {
+        int year = group.Key;
+        var teacherId = Model.Allocations.ContainsKey(year) ? Model.Allocations[year] : 0;
+        var teacher = teacherId != 0 ? DAL.DB.Teachers.Get(teacherId) : null;
+
+        <details id="courses_details_@year" open>
+            <summary>
+                Cohorte @year
+                @if (teacher != null)
+                {
+                    <span style="font-weight: normal; margin-left: 20px; font-size: 0.9em; color: #666;">
+                        Enseignant :
+                        <a href="@Url.Action("Details", "Teachers", new { id = teacher.Id })" style="color: #0066cc; font-weight: bold; text-decoration: none;">
+                            @teacher.FirstName @teacher.LastName
+                        </a>
+                    </span>
+                }
+            </summary>
+
+            <div style="padding: 10px;">
+                @foreach (var student in group.OrderBy(s => s.LastName))
+                {
+                    <div class="student-row" style="margin-bottom: 8px;">
+                        <a href="@Url.Action("Details", "Students", new { id = student.Id })" style="color: black; text-decoration: none;">
+                            <span class="studentCode" style="color: #0066cc; font-weight: bold; margin-right: 10px;">@student.Code</span>
+                            @student.LastName @student.FirstName
+                        </a>
+                    </div>
+                }
+            </div>
+        </details>
+    }
+}

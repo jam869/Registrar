@@ -1,36 +1,68 @@
 @model Registrar.Models.Teacher
 
-@{ ViewBag.Title = "Modifier Professeur"; }
-
-<h2>Modifier : @Model.FirstName @Model.LastName</h2>
+@* Le titre dans le header est géré par le contrôleur (ViewBag.Title = "Professeur - Modification") *@
 
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    @Html.HiddenFor(m => m.Id)
-    @Html.HiddenFor(m => m.Code)
+    @Html.HiddenFor(model => model.Id)
+    @Html.HiddenFor(model => model.Code)
 
-    <div class="form-grid">
-        <div class="image-column">
-            @Helper.ImageUploader("Avatar", Model.Avatar, "Changer la photo")
-        </div>
+    @* Très important pour que l'image soit sauvegardée avec image-control.js *@
+    @Html.HiddenFor(model => model.Avatar, new { id = "Avatar" })
 
-        <div class="info-column">
-            @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+    <div style="max-width: 800px; margin: auto;">
+        @Html.ValidationSummary(false, "", new { @class = "text-danger" })
 
-            @Html.EditorFor(m => m.FirstName)
-            @Html.EditorFor(m => m.LastName)
-            @Html.EditorFor(m => m.Phone)
+        <details id="identification_section" open>
+            <summary>Identification - @Model.Code</summary>
+            <fieldset style="border:none !important; padding: 20px !important;">
 
-            @* On utilise TextBoxFor pour la date comme pour les étudiants *@
-            @Html.TextBoxFor(m => m.StartDate, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
-            @Html.ValidationMessageFor(m => m.StartDate)
+                <div style="margin: auto; width: fit-content; margin-bottom: 20px;">
+                    @Helper.ImageUploader("Avatar", Model.Avatar, "Cliquez pour changer la photo")
+                </div>
 
-         
-        </div>
+                <label>Prénom</label>
+                @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
+
+                <label>Nom</label>
+                @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
+
+                <label>Téléphone</label>
+                @Html.EditorFor(model => model.Phone, new { htmlAttributes = new { @class = "form-control phone" } })
+                @Html.ValidationMessageFor(model => model.Phone, "", new { @class = "text-danger" })
+
+                <label>Date d'embauche</label>
+                @* Votre code parfait pour le champ de date *@
+                @Html.TextBoxFor(m => m.StartDate, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
+                @Html.ValidationMessageFor(model => model.StartDate, "", new { @class = "text-danger" })
+            </fieldset>
+        </details>
+
+        <details id="alloc_section" open style="margin-top: 20px;">
+            <summary>Allocations : Session @Registrar.Models.NextSession.Caption</summary>
+            <fieldset style="border:none !important; padding: 20px !important;">
+                @* L'outil de sélection (Double Liste) *@
+                @Helper.SelectionLists("SelectedCourses", (SelectList)ViewBag.Allocations, (SelectList)ViewBag.Courses)
+            </fieldset>
+        </details>
     </div>
 }
 
 @section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
     <script src="~/Scripts/image-control.js"></script>
+    <script src="~/Scripts/selections.js"></script>
+    <script src="~/Scripts/jquery-maskedinput.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            // Applique le format automatique au numéro de téléphone (999) 999-9999
+            if ($.fn.mask) {
+                $('.phone').mask('(999) 999-9999');
+            }
+        });
+    </script>
 }

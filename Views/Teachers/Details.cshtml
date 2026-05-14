@@ -1,24 +1,51 @@
 @model Registrar.Models.Teacher
-@{ ViewBag.Title = "Professeur - Détails"; }
+@{
+    ViewBag.Title = "Professeur - Détails";
+    double seniority = (Registrar.Models.NextSession.CurrentDate - Model.StartDate).TotalDays / 365.25;
+}
 
-<div class="details-header">@Model.FirstName @Model.LastName</div>
+<div style="max-width: 900px; margin: auto;">
 
-<div class="row">
-    <div class="col-md-3">@Helper.Image(Model.Avatar, "UserMediumAvatar")</div>
-    <div class="col-md-6">
-        <div class="detail-row"><i class="fa fa-barcode"></i> <strong>@Model.Code</strong></div>
-        <div class="detail-row"><i class="fa fa-phone"></i> @Model.Phone</div>
-        <div class="detail-row"><i class="fa fa-calendar-check"></i> Embauché le @Model.StartDate.ToString("yyyy-MM-dd")</div>
-        <div class="detail-row">
-            @{ double years = (DateTime.Now - Model.StartDate).TotalDays / 365.25; }
-            <i class="fa fa-clock"></i> @Math.Round(years, 1) ans d'ancienneté
+    @* Section repliable qui agit comme un gros bouton gris *@
+    <details id="teacher_info" open>
+        <summary class="btn-details-summary">
+            <i class="fa fa-chalkboard-teacher"></i> @Model.FirstName @Model.LastName
+        </summary>
+
+        <div class="details-content-panel">
+            <div style="display: flex; gap: 30px; align-items: flex-start; padding: 20px;">
+                <div>
+                    @Helper.Image(Model.Avatar, "UserMediumAvatar")
+                </div>
+                <div>
+                    <div class="detail-row"><i class="fa fa-barcode"></i> <strong>@Model.Code</strong></div>
+                    <div class="detail-row"><i class="fa fa-phone"></i> @Model.Phone</div>
+                    <div class="detail-row"><i class="fa fa-calendar-alt"></i> Embauché le @Model.StartDate.ToString("d MMMM yyyy")</div>
+                    <div class="detail-row"><i class="fa fa-clock"></i> @seniority.ToString("F1") ans d'ancienneté</div>
+                </div>
+            </div>
         </div>
-    </div>
-    <div class="col-md-3" style="text-align: right;">
-        @if (Registrar.Models.User.ConnectedUser != null && Registrar.Models.User.ConnectedUser.CanWrite)
-        {
-            <a href="@Url.Action("Edit", new { id = Model.Id })" class="btn btn-primary"><i class="fa fa-edit"></i></a>
-        }
-        <a href="@Url.Action("Index")" class="btn btn-default"><i class="fa fa-list"></i></a>
-    </div>
+    </details>
+
+    <h3 style="margin-top: 30px; font-weight: bold;">Allocations</h3>
+    <details id="allocations_list" open>
+        <summary>Allocations</summary>
+        <div style="padding: 15px;">
+            @if (ViewBag.AllocatedCourses != null && ((List<Registrar.Models.Course>)ViewBag.AllocatedCourses).Any())
+            {
+                foreach (var course in (List<Registrar.Models.Course>)ViewBag.AllocatedCourses)
+                {
+                    <div class="course-row" style="margin-bottom: 10px;">
+                        <a href="@Url.Action("Details", "Courses", new { id = course.Id })" style="color: black; text-decoration: none;">
+                            <span style="color: #0066cc; font-weight: bold;">[@course.Session] @course.Code</span> @course.Title
+                        </a>
+                    </div>
+                }
+            }
+            else
+            {
+                <p>Aucune allocation pour ce professeur.</p>
+            }
+        </div>
+    </details>
 </div>

@@ -407,6 +407,7 @@ namespace Controllers
             }
             return null;
         }
+
         [UserAccess(Access.Admin)]
         public ActionResult DeleteLoginsDay(string day)
         {
@@ -430,6 +431,35 @@ namespace Controllers
             catch (Exception) { }
             return RedirectToAction("EventsJournal");
         }
+        [AccessControl.UserAccess(Access.View)]
+        public ActionResult ChangeNextSession()
+        {
+            bool isAutomne = Registrar.Models.NextSession.ValidSessions.Contains(1);
+
+            ViewBag.Session = isAutomne ? "Automne" : "Hiver";
+            ViewBag.Year = Registrar.Models.NextSession.Year;
+
+            ViewBag.Title = "Session de sélection"; 
+            return View();
+        }
+
+        [HttpPost]
+        [AccessControl.UserAccess(Access.View)]
+        public ActionResult ChangeNextSession(string Session, int Year)
+        {
+            if (Session == "Automne")
+            {
+                Registrar.Models.NextSession.CurrentDate = new DateTime(Year, 6, 1);
+            }
+            else
+            {
+                Registrar.Models.NextSession.CurrentDate = new DateTime(Year, 1, 1);
+            }
+
+            return RedirectToAction("Index", "Students");
+        }
+
         #endregion
     }
+
 }

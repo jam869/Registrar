@@ -1,37 +1,70 @@
 ﻿@{
     var connectedUser = Registrar.Models.User.ConnectedUser;
-    string action = ViewContext.RouteData.Values["action"].ToString();
-    string controller = ViewContext.RouteData.Values["controller"].ToString();
+    bool userConnected = connectedUser != null;
+    string controller = ViewContext.RouteData.Values["controller"].ToString().ToLower();
+    string action = ViewContext.RouteData.Values["action"].ToString().ToLower();
+    var routeId = ViewContext.RouteData.Values["id"];
 }
 
-<div class="layout-header">
-    <div class="header-left">
-        @* Le bouton Hamburger pour le menu latéral *@
-        <i class="icon fa fa-bars" id="menu-toggle" title="Menu"></i>
-        <span class="header-title">@ViewBag.Title</span>
+<div class="headerMenu">
+    <div class="header-left-part">
+        <a href="@Url.Action("Index", "Students")" class="siteIcon" title="Collège Lionel-Groulx"></a>
+
+        @if (userConnected)
+        {
+            if (action == "index")
+            {
+                @* Menu Hamburger : UNIQUEMENT dans les Index *@
+                <div class="dropdown">
+                    <div data-bs-toggle="dropdown" aria-expanded="false" style="cursor: pointer; margin-right:10px;">
+                        <i class="cmdIcon fa fa-bars" title="Menu"></i>
+                    </div>
+                    <div class="dropdown-menu dropdown-menu-start noselect" style="width: 260px;">
+                        <a href="@Url.Action("EditProfil", "Accounts")" class="dropdown-item item-layout">
+                            <i class="menuIcon fa fa-address-card"></i><span class="flexItem">Profil...</span>
+                        </a>
+                        <a href="@Url.Action("Logout", "Accounts")" class="dropdown-item item-layout">
+                            <i class="menuIcon fa fa-sign-out-alt"></i><span class="flexItem">Déconnexion...</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="header-nav-container">
+                    <a href="@Url.Action("Index", "Students")" class="@(controller == "students" ? "active-nav" : "")">Étudiants</a>
+                    <a href="@Url.Action("Index", "Courses")" class="@(controller == "courses" ? "active-nav" : "")">Cours</a>
+                    <a href="@Url.Action("Index", "Teachers")" class="@(controller == "teachers" ? "active-nav" : "")">Profs</a>
+                </div>
+            }
+            else
+            {
+                <div class="pageTitle">@ViewBag.Title</div>
+            }
+        }
     </div>
 
-    @if (connectedUser != null)
-    {
-        <div class="header-right">
-            @if (action == "Index")
-            {
-                <i id="toggleSearchBtn" class="icon fa fa-search" title="Rechercher"></i>
-                if (connectedUser.CanWrite)
+    <div class="header-right-part">
+        @if (userConnected)
+        {
+            <div class="menu">
+                @if (action == "index")
                 {
-                    <a href="@Url.Action("Create")" class="icon fa fa-plus-circle" title="Ajouter"></a>
+                    <a href="/@controller/Create" class="cmdIcon fa fa-plus-circle" title="Ajouter..."></a>
+                    <i class="cmdIcon fa fa-search" id="toggleSearchBtn" title="Recherche..."></i>
                 }
-            }
-            else if (action == "Details" || action == "Edit" || action == "Create")
-            {
-                @* Bouton Retour (Liste) *@
-                <a href="@Url.Action("Index")" class="icon fa fa-list-ul" title="Retour à la liste"></a>
-
-                if (action == "Details" && connectedUser.CanWrite)
+                else if (action == "details")
                 {
-                    <a href="@Url.Action("Edit", new { id = ViewContext.RouteData.Values["id"] })" class="icon fa fa-edit" title="Modifier"></a>
+                    <a href="/@controller/Edit/@routeId" class="cmdIcon fa fa-edit" title="Modifier..."></a>
+                    @* Corbeille Grise/Bleue (pas rouge) *@
+                    <i class="cmdIcon fa fa-trash-can" title="Effacer" onclick="bootboxConfirmDelete('/@controller/Delete/@routeId', '@controller')" style="color: #555;"></i>
+                    @* Le X : Carré bleu avec X blanc *@
+                    <a href="/@controller/Index" class="btn-close-square" title="Retour"><i class="fa fa-xmark"></i></a>
                 }
-            }
-        </div>
-    }
+                else if (action == "create" || action == "edit")
+                {
+                    <i class="cmdIcon fa fa-check" title="Sauvegarder" onclick="$('form').submit()"></i>
+                    <a href="/@controller/Index" class="btn-close-square" title="Annuler"><i class="fa fa-xmark"></i></a>
+                }
+            </div>
+        }
+    </div>
 </div>

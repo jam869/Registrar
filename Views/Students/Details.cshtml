@@ -1,35 +1,43 @@
 @model Registrar.Models.Student
-@{ ViewBag.Title = "Étudiant - Détails"; }
+@{
+    ViewBag.Title = "Étudiant - Détails";
+}
 
-<div class="details-header">@Model.FirstName @Model.LastName</div>
+<details id="student_info" open>
+    <summary class="btn-details-summary">
+        <i class="fa fa-graduation-cap"></i> @Model.FirstName @Model.LastName
+    </summary>
 
-<div class="row">
-    <div class="col-md-8">
-        <div class="detail-row"><i class="fa fa-barcode"></i> <strong>@Model.Code</strong></div>
-        <div class="detail-row"><i class="fa fa-phone"></i> @Model.Phone</div>
-        <div class="detail-row"><i class="fa fa-paper-plane"></i> <a href="mailto:@Model.Email">@Model.Email</a></div>
-        <div class="detail-row"><i class="fa fa-birthday-cake"></i> @Model.BirthDate.ToString("yyyy-MM-dd")</div>
+    <div class="details-content-panel" style="padding: 20px;">
+        <div class="detail-row">
+            <i class="fa fa-barcode"></i> <strong>@Model.Code</strong>
+        </div>
+        <div class="detail-row">
+            <i class="fa fa-phone"></i> @Model.Phone
+        </div>
+        <div class="detail-row">
+            <i class="fa fa-envelope"></i> @Model.Email
+        </div>
+        <div class="detail-row">
+            <i class="fa fa-birthday-cake"></i> Né le @Model.BirthDate.ToString("d MMMM yyyy")
+        </div>
     </div>
-    <div class="col-md-4" style="text-align: right;">
-        @if (Registrar.Models.User.ConnectedUser != null && Registrar.Models.User.ConnectedUser.CanWrite)
-        {
-            <a href="@Url.Action("Edit", new { id = Model.Id })" class="btn btn-primary" title="Modifier"><i class="fa fa-edit"></i></a>
-            <a href="@Url.Action("Delete", new { id = Model.Id })" class="btn btn-danger" title="Supprimer" onclick="return confirm('Voulez-vous vraiment supprimer cet étudiant ?');"><i class="fa fa-trash"></i></a>
-        }
-        <a href="@Url.Action("Index")" class="btn btn-default" title="Retour"><i class="fa fa-list"></i></a>
-    </div>
-</div>
+</details>
 
 <h3 style="margin-top:30px;">Inscriptions</h3>
-<details id="details_inscriptions_@Model.Id" open>
-    <summary>Inscriptions : @Registrar.Models.NextSession.Caption</summary>
-    <div style="padding:10px;">
-        @* Boucle sur les cours du ViewBag chargé par le contrôleur *@
-        @foreach (var course in (IEnumerable<Registrar.Models.Course>)ViewBag.EnrolledCourses)
+<details id="inscriptions_details" open>
+    <summary>Inscriptions</summary>
+    <div style="padding: 15px;">
+        @if (ViewBag.EnrolledCourses != null)
         {
-            <div class="course-row" style="margin-bottom:8px;">
-                <span style="color:#0066cc; font-weight:bold;">[@course.Session] @course.Code</span> @course.Title
-            </div>
+            foreach (var course in (List<Registrar.Models.Course>)ViewBag.EnrolledCourses)
+            {
+                <div class="course-row" style="margin-bottom: 8px;">
+                    <a href="@Url.Action("Details", "Courses", new { id = course.Id })" style="color: black; text-decoration: none;">
+                        <span style="color: #0066cc; font-weight: bold;">[@course.Session] @course.Code</span> @course.Title
+                    </a>
+                </div>
+            }
         }
     </div>
 </details>

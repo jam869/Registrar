@@ -221,45 +221,211 @@ summary {
     border-bottom: 3px solid #0066cc;
     padding-bottom: 10px;
 }
-.layout-header {
+
+.active-nav {
+    font-weight: bold !important; /* Met le texte en gras */
+    color: #000 !important; /* Met le texte en noir foncé */
+    border-bottom: none !important; /* ENLÈVE LE SOULIGNEMENT */
+    text-decoration: none !important; /* Sécurité supplémentaire */
+}
+/* Assurez-vous que le dropdown Bootstrap s'aligne bien à droite */
+.dropdown-menu-end {
+    right: 0;
+    left: auto;
+}
+
+
+
+.headerMenu {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #222;
-    color: white;
-    padding: 0 20px;
+    padding: 0 10px;
     height: 60px;
+    background-color: white;
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 15px; /* Évite que ça colle au contenu en dessous */
 }
 
-.layout-header-nav a {
-    color: #bbb;
-    text-decoration: none;
-    margin: 0 15px;
+/* La section GAUCHE : Logo + Titre/Nav */
+.header-left-part {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    overflow: hidden; /* Empêche les débordements */
+}
+
+.siteIcon {
+    background-image: url('../WebApp.png'); /* Le chemin correct avec les '..' */
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 40px;
+    height: 40px;
+    display: block;
+    flex-shrink: 0;
+}
+
+.pageTitle {
+    font-size: 1.4em;
     font-weight: bold;
-    text-transform: uppercase;
+    color: #444;
+    white-space: nowrap; /* GARDE SUR UNE LIGNE */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin: 0; /* Enlève les marges par défaut */
 }
 
-    .layout-header-nav a.active {
-        color: white;
-        border-bottom: 2px solid white;
+/* Navigation principale */
+.header-nav-container {
+    display: flex;
+    gap: 20px;
+    margin-left: 10px;
+}
+
+    .header-nav-container a {
+        text-decoration: none !important;
+        color: #555;
+        font-size: 1.1em;
     }
 
-.layout-header-commands {
+        .header-nav-container a:hover {
+            color: #0066cc;
+        }
+
+
+
+/* La section DROITE : Boutons et Hamburger */
+.header-right-part {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex-shrink: 0;
+}
+
+.menu {
     display: flex;
     align-items: center;
     gap: 15px;
 }
 
-    .layout-header-commands .icon {
-        font-size: 20px;
-        cursor: pointer;
-        color: white;
+/* Assure que le menu hamburger ne dépasse pas l'écran */
+.dropdown-menu-end {
+    right: 0 !important;
+    left: auto !important;
+}
+
+.footerPanel {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 40px;
+    font-size: 0.9em;
+    background-color: #f8f8f8;
+    border-top: 1px solid #ccc;
+    color: #555;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    left: 0;
+    z-index: 1000;
+}
+
+    .footerPanel a {
+        color: #0066cc !important;
+        text-decoration: none;
     }
 
-.online-status {
-    position: absolute;
-    bottom: 0;
-    right: -5px;
-    width: 12px;
-    height: 12px;
+        .footerPanel a:hover {
+            text-decoration: underline;
+        }
+
+    /* On s'assure que le b (gras) est bien noir et visible */
+    .footerPanel b {
+        font-weight: bold;
+        color: #000;
+    }
+
+.btn-details-summary {
+    background-color: #eee;
+    padding: 12px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    list-style: none; /* Enlève la flèche par défaut */
+    border: 1px solid #ccc;
+    display: flex;
+    align-items: center;
 }
+
+    .btn-details-summary:hover {
+        background-color: #e0e0e0;
+    }
+
+    .btn-details-summary i {
+        font-size: 1.4em;
+        margin-right: 15px;
+        color: #555;
+    }
+
+.details-content-panel {
+    border: 1px solid #ccc;
+    border-top: none;
+    background-color: #fff;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+/* Style pour le modal Bootbox (Nicolas Chourot) */
+.bootbox .modal-header {
+    background-color: #d9534f;
+    color: white;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+.bootbox .modal-title {
+    font-weight: bold;
+    font-size: 1.5em;
+}
+
+.bootbox .close {
+    color: white;
+    opacity: 1;
+}
+
+.bootbox .modal-footer .btn-danger {
+    background-color: #d9534f;
+    border-color: #d43f3a;
+}
+
+/* Le bouton X : Carré bleu avec X blanc */
+.btn-close-square {
+    background-color: #0066cc;
+    color: white !important;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    text-decoration: none;
+    margin-left: 5px;
+}
+
+/* Alignement Libellé : Champ de saisie (image_68c9dd.png) */
+.form-horizontal-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+    .form-horizontal-row label {
+        width: 150px;
+        font-weight: bold;
+        margin-bottom: 0;
+    }
+
+    .form-horizontal-row .form-control {
+        flex: 1;
+    }

@@ -46,14 +46,39 @@ namespace Registrar.Controllers
             return View(course);
         }
 
-        // --- MÉTHODE EDIT (GET) CORRIGÉE ---
+        [AccessControl.UserAccess(Access.View)]
+        public ActionResult Details(int id)
+        {
+            Course course = Courses.Get(id);
+            if (course == null) return HttpNotFound();
+
+            ViewBag.Title = "Cours - Détails";
+
+            // 1. On récupère tous les étudiants inscrits à ce cours
+            var enrolledStudents = DB.Students.ToList()
+                .Where(s => course.Inscriptions.Contains(s.Id))
+                .ToList();
+
+            // 2. On groupe ces étudiants par année (cohorte) décroissante
+            // On passe ce groupe à la vue
+            ViewBag.GroupedInscriptions = enrolledStudents
+                .GroupBy(s => s.Year)
+                .OrderByDescending(g => g.Key)
+                .ToList();
+
+            return View(course);
+        }
+
+        // GET: Courses/Edit/5
         [AccessControl.UserAccess(Access.Write)]
         public ActionResult Edit(int id)
         {
             Course course = Courses.Get(id);
             if (course == null) return HttpNotFound();
 
-            // Préparation des listes pour l'outil de sélection des étudiants
+            ViewBag.Title = "Cours - Modification";
+
+            // Préparation des listes pour l'outil de sélection (double liste)
             var allStudents = DB.Students.ToList().OrderBy(s => s.LastName).ThenBy(s => s.FirstName).ToList();
             var enrolledStudents = allStudents.Where(s => course.Inscriptions.Contains(s.Id)).ToList();
 

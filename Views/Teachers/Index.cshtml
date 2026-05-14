@@ -1,28 +1,37 @@
+@{ ViewBag.Title = "Profs"; }
 
-
-<div class="header-container">
-
+<div id="searchPanel" style="display:none; margin-bottom:15px; background:#f9f9f9; padding:10px; border-radius:5px; border: 1px solid #ddd;">
+    <input type="text" id="searchInput" class="form-control" placeholder="Rechercher par nom ou code..." style="width:100%;" />
 </div>
-
-<hr />
 
 <div id="teachersListContainer">
     <img src="~/Content/UI-Images/Loading_icon.gif" style="display:block; margin:auto;" />
 </div>
 
 @section Scripts {
-    <script defer>
+    <script>
         $(document).ready(function () {
-            new AutoRefreshedPanel(
-                "teachersListContainer",
-                "@Url.Action("GetTeachers")", // <--- LE PROBLÈME ÉTAIT ICI
-                5,
-                function () {
-                    if (typeof RestoreDetailsState === "function") {
-                        RestoreDetailsState();
-                    }
-                }
-            );
+            $("#toggleSearchBtn").click(function () { $("#searchPanel").slideToggle(); $("#searchInput").focus(); });
+
+            function applySearch() {
+                let keyword = $("#searchInput").val().toLowerCase();
+                $(".TeacherListLayout").each(function () {
+                    let row = $(this);
+                    let text = row.text().toLowerCase();
+                    if (keyword === "" || text.indexOf(keyword) > -1) {
+                        row.show();
+                        if (keyword !== "") {
+                            let regex = new RegExp("(" + keyword + ")", "gi");
+                            row.find('.teacherName, .teacherCode').each(function () {
+                                let original = $(this).text().replace(/(<mark>|<\/mark>)/igm, "");
+                                $(this).html(original.replace(regex, "<mark>$1</mark>"));
+                            });
+                        }
+                    } else { row.hide(); }
+                });
+            }
+            $("#searchInput").on("keyup", applySearch);
+            new AutoRefreshedPanel("teachersListContainer", "@Url.Action("GetTeachers")", 5, applySearch);
         });
     </script>
 }

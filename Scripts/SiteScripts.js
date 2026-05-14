@@ -200,6 +200,33 @@ $(document).ready(function () {
             }
         });
     });
+
+    function bootboxConfirmDelete(url, controller) {
+        let type = "cet élément";
+        if (controller === "students") type = "cet étudiant";
+        if (controller === "teachers") type = "ce professeur";
+        if (controller === "courses") type = "ce cours";
+
+        bootbox.confirm({
+            title: "Effacer",
+            message: "Voulez-vous vraiment effacer " + type + " ?",
+            buttons: {
+                cancel: {
+                    label: 'Annuler',
+                    className: 'btn-secondary'
+                },
+                confirm: {
+                    label: 'Effacer',
+                    className: 'btn-danger'
+                }
+            },
+            callback: function (result) {
+                if (result) {
+                    window.location.href = url;
+                }
+            }
+        });
+    }
     // Gérer le Ctrl+Clic pour tout ouvrir/fermer
     $("summary").click(function (e) {
         if (e.ctrlKey) {
@@ -217,4 +244,5 @@ $(document).ready(function () {
             });
         }
     });
+
 });

@@ -1,0 +1,35 @@
+@{
+    ViewBag.Title = "Session de sélection";
+}
+
+<h2>Session de sélection</h2>
+<hr />
+
+@using (Html.BeginForm())
+{
+    <fieldset>
+        <legend>Session</legend>
+        <div style="display: flex; flex-direction: column; gap: 15px; padding: 10px;">
+
+            <div>
+                <label>Saison</label>
+                <select name="Session" class="form-control">
+                    <option value="Automne" @(ViewBag.Session == "Automne" ? "selected" : "")>Automne</option>
+                    <option value="Hiver" @(ViewBag.Session == "Hiver" ? "selected" : "")>Hiver</option>
+                </select>
+            </div>
+
+            <div>
+                <label>Année</label>
+                <input type="number" name="Year" value="@ViewBag.Year" class="form-control" min="2020" max="2100" />
+            </div>
+
+        </div>
+    </fieldset>
+
+    <div style="margin-top: 20px;">
+        @* Utilisation des icônes de soumission du prof *@
+        <button type="submit" class="btn btn-primary">Enregistrer</button>
+        <a href="@Url.Action("Index", "Students")" class="btn btn-default">Annuler</a>
+    </div>
+}

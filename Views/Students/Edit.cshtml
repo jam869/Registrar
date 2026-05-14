@@ -4,52 +4,84 @@
 
 @using (Html.BeginForm())
 {
+    @Html.AntiForgeryToken()
     @Html.HiddenFor(model => model.Id)
     @Html.HiddenFor(model => model.Code)
 
-    @Html.ValidationSummary(false, "Attention :", new { @class = "text-danger", style = "color:red; font-weight:bold; margin-bottom:15px;" })
+    <div style="max-width: 800px; margin: auto;">
+        @Html.ValidationSummary(false, "Attention :", new { @class = "text-danger", style = "color:red; font-weight:bold; margin-bottom:15px;" })
 
-    <details id="info_section" open>
-        <summary>Informations - [@Model.Code]</summary>
-        <div class="form-grid">
-            <div>
-                @Html.EditorFor(m => m.FirstName)
-                @Html.ValidationMessageFor(m => m.FirstName, "", new { @class = "text-danger", style = "color:red; font-size:12px;" })
-            </div>
+        <details id="info_section" open>
+            <summary>Informations - @Model.Code</summary>
 
-            <div>
-                @Html.EditorFor(m => m.LastName)
-                @Html.ValidationMessageFor(m => m.LastName, "", new { @class = "text-danger", style = "color:red; font-size:12px;" })
-            </div>
+            <fieldset style="border:none !important; padding: 20px !important;">
 
-            <div>
-                @Html.TextBoxFor(m => m.BirthDate, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
-                @Html.ValidationMessageFor(m => m.BirthDate, "", new { @class = "text-danger", style = "color:red; font-size:12px;" })
-            </div>
+                <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                    <label style="width: 160px; font-weight: bold; margin-bottom: 0; color: #555;">Prénom :</label>
+                    <div style="flex: 1;">
+                        @Html.EditorFor(m => m.FirstName, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(m => m.FirstName, "", new { @class = "text-danger", style = "color:red; font-size:12px;" })
+                    </div>
+                </div>
 
-            <div>
-                @Html.EditorFor(m => m.Email)
-                @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger", style = "color:red; font-size:12px;" })
-            </div>
+                <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                    <label style="width: 160px; font-weight: bold; margin-bottom: 0; color: #555;">Nom :</label>
+                    <div style="flex: 1;">
+                        @Html.EditorFor(m => m.LastName, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(m => m.LastName, "", new { @class = "text-danger", style = "color:red; font-size:12px;" })
+                    </div>
+                </div>
 
-            <div>
-                @Html.EditorFor(m => m.Phone, new { htmlAttributes = new { @class = "form-control Phone", placeholder = "(000) 000-0000" } })
-                @Html.ValidationMessageFor(m => m.Phone, "", new { @class = "text-danger", style = "color:red; font-size:12px;" })
-            </div>
-        </div>
-    </details>
+                <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                    <label style="width: 160px; font-weight: bold; margin-bottom: 0; color: #555;">Date de naissance :</label>
+                    <div style="flex: 1;">
+                        @Html.TextBoxFor(m => m.BirthDate, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
+                        @Html.ValidationMessageFor(m => m.BirthDate, "", new { @class = "text-danger", style = "color:red; font-size:12px;" })
+                    </div>
+                </div>
 
-    <details id="enrollement_section" open>
-        <summary>Inscriptions: @Registrar.Models.NextSession.Caption</summary>
+                <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                    <label style="width: 160px; font-weight: bold; margin-bottom: 0; color: #555;">Téléphone :</label>
+                    <div style="flex: 1;">
+                        @Html.EditorFor(m => m.Phone, new { htmlAttributes = new { @class = "form-control phone", placeholder = "(000) 000-0000" } })
+                        @Html.ValidationMessageFor(m => m.Phone, "", new { @class = "text-danger", style = "color:red; font-size:12px;" })
+                    </div>
+                </div>
 
-        @* On utilise l'outil EXACT du professeur *@
-        @Helper.SelectionLists("SelectedCourses", (SelectList)ViewBag.Registrations, (SelectList)ViewBag.Courses)
-    </details>
+                <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                    <label style="width: 160px; font-weight: bold; margin-bottom: 0; color: #555;">Courriel :</label>
+                    <div style="flex: 1;">
+                        @Html.EditorFor(m => m.Email, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger", style = "color:red; font-size:12px;" })
+                    </div>
+                </div>
 
-  
+            </fieldset>
+        </details>
+
+        <details id="enrollement_section" open style="margin-top: 20px;">
+            <summary>Inscriptions : Session @Registrar.Models.NextSession.Caption</summary>
+
+            <fieldset style="border:none !important; padding: 20px !important;">
+                @* On utilise exactement les ViewBags de votre contrôleur (Registrations et Courses) *@
+                @Helper.SelectionLists("SelectedCourses", (SelectList)ViewBag.Registrations, (SelectList)ViewBag.Courses)
+            </fieldset>
+        </details>
+
+    </div>
 }
 
 @section Scripts {
-    @* On utilise le script EXACT du professeur pour faire marcher ses listes *@
+    @Scripts.Render("~/bundles/jqueryval")
+    @* Scripts obligatoires pour les listes de sélection et le masque de téléphone *@
     <script src="~/Scripts/selections.js"></script>
+    <script src="~/Scripts/jquery-maskedinput.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Applique un format automatique pour le téléphone
+            if ($.fn.mask) {
+                $('.phone').mask('(999) 999-9999');
+            }
+        });
+    </script>
 }

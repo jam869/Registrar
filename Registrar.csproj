@@ -475,6 +475,8 @@
     <Content Include="Views\Students\Create.cshtml" />
     <Content Include="Views\Students\Details.cshtml" />
     <Content Include="Views\Teachers\Details.cshtml" />
+    <Content Include="Views\Accounts\ChangeNextSession.cshtml" />
+    <Content Include="Views\Courses\Details.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
