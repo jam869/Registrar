@@ -9,13 +9,13 @@ namespace Registrar.Models
         [Required(ErrorMessage = "Le code est requis")]
         public string Code { get; set; }
 
-        [Required(ErrorMessage = "Le prénom est requis")]
+        [Required(ErrorMessage = "Le prÃ©nom est requis")]
         public string FirstName { get; set; }
 
         [Required(ErrorMessage = "Le nom est requis")]
         public string LastName { get; set; }
 
-        [Required(ErrorMessage = "Le téléphone est requis")]
+        [Required(ErrorMessage = "Le tÃ©lÃ©phone est requis")]
         public string Phone { get; set; }
 
         [Required(ErrorMessage = "La date est requise")]
