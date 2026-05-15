@@ -28,45 +28,45 @@
                     {
                         if (login.User != null)
                         {
-                            <div class="journalLayout">
-                                <div style="width:200px">@Helper.AvatarUser(login.User, "UserSmallAvatar")</div>
-                                <div>@shiftedEventDate.ToString("HH:mm")</div>
+                                <div class="journalLayout">
+                                    <div style="width:200px">@Helper.AvatarUser(login.User, "UserSmallAvatar")</div>
+                                    <div>@shiftedEventDate.ToString("HH:mm")</div>
 
-                                @if (shiftedEventDate != shiftedLogoutDate)
-                                {
-                                    <div>-</div>
-                                    <div>@shiftedLogoutDate.ToString("HH:mm")</div>
-                                }
-                                else
-                                {
-                                    if (loggedUsersId.Contains(login.User.Id))
+                                    @if (shiftedEventDate != shiftedLogoutDate)
                                     {
-                                        loggedUsersId.Remove(login.User.Id);
                                         <div>-</div>
-                                        <div title="Est en ligne en ce moment">@Helper.OnLineStatusIcon(true, false)</div>
+                                        <div>@shiftedLogoutDate.ToString("HH:mm")</div>
                                     }
                                     else
                                     {
-                                        <div>-</div>
-                                        <div>@Helper.TimeOutIcon()</div>
+                                        if (loggedUsersId.Contains(login.User.Id))
+                                        {
+                                            loggedUsersId.Remove(login.User.Id);
+                                            <div>-</div>
+                                            <div title="Est en ligne en ce moment">@Helper.OnLineStatusIcon(true, false)</div>
+                                        }
+                                        else
+                                        {
+                                            <div>-</div>
+                                            <div>@Helper.TimeOutIcon()</div>
+                                        }
                                     }
-                                }
 
-                                @if (login.IpAddress != "::1" && login.CountryCode != null)
-                                {
-                                    <div>
-                                        <span style="font-weight:bold; color:#0066cc;">@login.CountryCode.ToUpper()</span>
-                                    </div>
-                                    <div class="extraJournalInfo IP_Address">
-                                        @login.IpAddress, @login.City, @login.RegionName
-                                    </div>
-                                }
-                                else
-                                {
-                                    <div class="extraJournalInfo IP_Address">&nbsp;</div>
-                                }
+                                    @if (login.IpAddress != "::1" && login.CountryCode != null)
+                                    {
+                                        <div>
+                                            @Helper.CountryFlag(login.CountryCode)
+                                        </div>
+                                        <div class="extraJournalInfo IP_Address">
+                                            @login.IpAddress, @login.City, @login.RegionName
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="extraJournalInfo IP_Address">&nbsp;</div>
+                                    }
 
-                            </div>
+                                </div>
                         }
                         index++;
                         if (index < count)
