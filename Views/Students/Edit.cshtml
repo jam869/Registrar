@@ -62,7 +62,6 @@
         <details id="enrollement_section" open style="margin-top: 20px;">
             <summary>Inscriptions : @Registrar.Models.NextSession.Caption</summary>
             <fieldset style="border:none !important; padding: 20px !important;">
-                @* On utilise exactement les ViewBags de votre contrôleur (Registrations et Courses) *@
                 @Helper.SelectionLists("SelectedCourses", (SelectList)ViewBag.Registrations, (SelectList)ViewBag.Courses)
             </fieldset>
         </details>
@@ -72,12 +71,10 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
-    @* Scripts obligatoires pour les listes de sélection et le masque de téléphone *@
     <script src="~/Scripts/selections.js"></script>
     <script src="~/Scripts/jquery-maskedinput.js"></script>
     <script>
         $(document).ready(function () {
-            // Applique un format automatique pour le téléphone
             if ($.fn.mask) {
                 $('.phone').mask('(999) 999-9999');
             }

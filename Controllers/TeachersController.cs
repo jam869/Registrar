@@ -18,7 +18,6 @@ namespace Registrar.Controllers
             return View();
         }
 
-        // Action pour l'auto-refresh
         [AccessControl.UserAccess(Access.View)]
         public ActionResult GetTeachers(bool forceRefresh = false)
         {
@@ -81,7 +80,6 @@ namespace Registrar.Controllers
         [AccessControl.UserAccess(Access.Write)]
         public ActionResult Create(Teacher teacher)
         {
-            // On retire le code de la validation car il sera généré ici
             ModelState.Remove("Code");
 
             if (ModelState.IsValid)
@@ -103,16 +101,11 @@ namespace Registrar.Controllers
         {
             if (ModelState.IsValid)
             {
-                // 1. Sauvegarde des informations de base du prof
                 Teachers.Update(teacher);
 
-                // 2. Synchronisation des allocations dans les fichiers de COURS
                 int currentYear = Registrar.Models.NextSession.Year;
                 var validSessions = Registrar.Models.NextSession.ValidSessions;
 
-                // --- LA CORRECTION EST ICI (.ToArray()) ---
-                // On convertit la liste en Array (tableau fixe) pour la bloquer en mémoire.
-                // Ainsi, le "Update" ne fera plus planter la boucle foreach !
                 var allCourses = DAL.DB.Courses.ToList().ToArray();
 
                 foreach (var course in allCourses)
@@ -133,14 +126,13 @@ namespace Registrar.Controllers
                     {
                         // On retire le prof du cours car il a été désélectionné
                         course.Allocations.Remove(currentYear);
-                        DAL.DB.Courses.Update(course); // Ne plantera plus !
+                        DAL.DB.Courses.Update(course); 
                     }
                 }
 
                 return RedirectToAction("Index");
             }
 
-            // En cas d'erreur, on recharge les listes pour ne pas faire planter la vue
             int year = Registrar.Models.NextSession.Year;
             var courses = DAL.DB.Courses.ToList().Where(c => Registrar.Models.NextSession.ValidSessions.Contains(c.Session)).OrderBy(c => c.Code).ToList();
             var assigned = courses.Where(c => c.Allocations.ContainsKey(year) && c.Allocations[year] == teacher.Id).ToList();

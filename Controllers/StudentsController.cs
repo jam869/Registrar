@@ -28,7 +28,6 @@ namespace Registrar.Controllers
             // On trouve les cours de l'étudiant
             var registeredCourses = allCourses.Where(c => c.Inscriptions.Contains(id)).ToList();
 
-            // UTILISATION DE SELECTLISTUTILITIES (Obligatoire pour l'outil du prof)
             ViewBag.Courses = SelectListUtilities<Course>.Convert(allCourses);
             ViewBag.Registrations = SelectListUtilities<Course>.Convert(registeredCourses);
 
@@ -69,7 +68,6 @@ namespace Registrar.Controllers
             }
             return null;
         }
-        // POST: Students/Edit/5
         [HttpPost]
         [AccessControl.UserAccess(Access.Write)]
         public ActionResult Edit(Student student, List<int> SelectedCourses)
@@ -157,7 +155,6 @@ namespace Registrar.Controllers
         [AccessControl.UserAccess(Access.Write)]
         public ActionResult Create(Student student)
         {
-            // On retire le code des erreurs de validation puisqu'on va le générer
             ModelState.Remove("Code");
 
             if (ModelState.IsValid)
@@ -182,7 +179,6 @@ namespace Registrar.Controllers
 
             var courses = Courses.ToList().Where(c => c.Inscriptions.Contains(id)).ToList();
 
-            // Calcul exact : (Session 1 et 2 = +0 an), (Session 3 et 4 = +1 an), etc.
             ViewBag.GroupedInscriptions = courses
                 .GroupBy(c => student.Year + ((c.Session - 1) / 2))
                 .OrderByDescending(g => g.Key)

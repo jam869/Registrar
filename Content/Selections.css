@@ -1,64 +1,108 @@
 ﻿
 .selectionsGrid {
-    display: flex;
-    flex-flow: row;
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    width: 100%;
     font-family: Courrier,monospace;
     font-size: smaller;
-    /*border: 1px solid #ccc;
-    border-radius: 6px;
-    padding: 4px;*/
     padding-top : 8px;
     gap:0px;
     margin:0px;
     padding-bottom:3px;
+    align-items: stretch;
 }
 
-.HorSelectionsCMD {
-    margin:0px;
+.selectionsGrid.stacked {
+    flex-direction: column !important;
+}
+
+.SelectionsCMD {
     display: flex;
     flex-direction: column;
-    min-width: 40px;
+    min-width: 60px;
     align-items: center;
     justify-content: center;
-    padding-right:8px;
+    padding: 0 10px;
+    gap: 15px;
 }
 
-.VerSelectionsCMD {
-    display: none;
+.selectionsGrid.stacked .SelectionsCMD {
     flex-direction: row;
-    min-height: 40px;
-    align-items: center;
-    justify-content: center;
+    min-height: 50px;
+    padding: 10px 0;
+    width: 100%;
 }
 
-.AddSelectionx {
-    margin-left:0px;
+/* Visibilité des icônes basée sur l'état de la grille */
+.AddSelection, .RemoveSelection, .UnselectAll {
+    display: none !important; /* Caché par défaut */
+    color: #0066cc !important;
+    -webkit-text-fill-color: #0066cc !important;
+    -webkit-text-stroke: none !important;
+    font-size: 32px !important;
+    cursor: pointer;
+    transition: transform 0.2s, color 0.2s;
 }
-.UnselectAll {
-    margin-top: 6px;
-    margin-bottom: 6px;
+
+/* Style spécifique pour le X (sans cercle) */
+.UnselectAll.fa-times {
+    font-size: 28px !important;
+    font-weight: bold;
+}
+
+.AddSelection:hover, .RemoveSelection:hover, .UnselectAll:hover {
+    color: #004c99 !important;
+    -webkit-text-fill-color: #004c99 !important;
+    transform: scale(1.1);
+}
+
+/* Flèches Horizontales (quand side-by-side) */
+.selectionsGrid:not(.stacked).has-unselected .AddSelection.hor-cmd {
+    display: block !important;
+}
+.selectionsGrid:not(.stacked).has-selected .RemoveSelection.hor-cmd {
+    display: block !important;
+}
+
+/* Flèches Verticales (quand stacked) */
+.selectionsGrid.stacked.has-unselected .AddSelection.ver-cmd {
+    display: block !important;
+}
+.selectionsGrid.stacked.has-selected .RemoveSelection.ver-cmd {
+    display: block !important;
+}
+
+/* Le X (quand il y a une sélection) */
+.selectionsGrid.has-selected .UnselectAll,
+.selectionsGrid.has-unselected .UnselectAll {
+    display: block !important;
 }
 
 .selectionsGrid select {
     flex: 1;
-    min-width: 120px;
+    min-width: 150px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 4px;
 }
 
 @media screen and (max-width: 560px ) {
     .selectionsGrid {
-        display: flex;
-        flex-flow: column;
-        margin-right: 2px;
+        flex-direction: column !important;
     }
+    .SelectionsCMD {
+        flex-direction: row !important;
+        width: 100%;
+    }
+    /* En mobile on force toujours le mode vertical */
+    .hor-cmd { display: none !important; }
+    /* Les ver-cmd s'afficheront via les règles has-selected/unselected */
+}
 
-    .HorSelectionsCMD {
-        display: none;
-    }
-
-    .VerSelectionsCMD {
-        display: flex;
-       
-    }
+select option {
+    text-overflow: ellipsis;
+    overflow: hidden;
 }
 
 select option {

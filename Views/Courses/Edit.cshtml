@@ -1,6 +1,5 @@
 @model Registrar.Models.Course
 
-@* Le titre dans le header blanc est géré par le contrôleur : ViewBag.Title = "Cours - Modification" *@
 
 @using (Html.BeginForm())
 {
@@ -29,7 +28,6 @@
         </details>
 
         <details id="enroll_section" open style="margin-top: 20px;">
-            @* Affiche par exemple : Inscriptions : Session Automne 2026 *@
             <summary>Inscriptions : Session @Registrar.Models.NextSession.Caption</summary>
             <fieldset style="border:none !important; padding: 15px !important;">
                 @Helper.SelectionLists("SelectedStudents", (SelectList)ViewBag.Enrolled, (SelectList)ViewBag.Students)
@@ -40,6 +38,5 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
-    @* Nécessaire pour le fonctionnement de la double liste *@
     <script src="~/Scripts/selections.js"></script>
 }

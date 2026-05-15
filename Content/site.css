@@ -131,7 +131,6 @@ mark {
     background-color: yellow;
 }
 
-/* --- CORRECTIONS PFI STRICTES --- */
 .StudentListLayout, .TeacherListLayout, .CourseListLayout {
     padding: 8px;
     border-bottom: 1px solid #ddd;
@@ -179,7 +178,6 @@ mark {
         margin-right: 10px;
     }
 
-/* --- STYLE EXACT N. CHOUROT --- */
 .StudentListLayout, .TeacherListLayout, .CourseListLayout {
     padding: 10px;
     border-bottom: 1px solid #eee;
@@ -262,7 +260,7 @@ mark {
 }
 
 .siteIcon {
-    background-image: url('../WebApp.png'); /* Le chemin correct avec les '..' */
+    background-image: url('../WebApp.png'); 
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
@@ -433,7 +431,7 @@ mark {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    border-radius: 4px; /* Mettez 0 ici si vous ne voulez aucun petit arrondi aux coins */
+    border-radius: 4px; 
     text-decoration: none !important;
     font-size: 16px;
     margin-left: 1px;
@@ -443,7 +441,6 @@ mark {
         background-color: #004c99 !important; /* Bleu un peu plus foncé au survol */
         color: white !important;
     }
-/* Alignement Libellé : Champ de saisie (image_68c9dd.png) */
 .form-horizontal-row {
     display: flex;
     align-items: center;

@@ -1,6 +1,6 @@
 using System;
 using System.ComponentModel.DataAnnotations;
-using DAL; // Requis pour utiliser [ImageAsset] et Record
+using DAL; 
 
 namespace Registrar.Models
 {
@@ -23,11 +23,9 @@ namespace Registrar.Models
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime StartDate { get; set; }
 
-        // --- LA MAGIE DE L'IMAGE EST ICI ---
         const string Avatars_Folder = @"/App_Assets/teachers/";
         const string Default_Avatar = @"no_avatar.png";
 
-        // L'attribut dit au système "Gère cette chaîne de caractères comme une image"
         [ImageAsset(Avatars_Folder, Default_Avatar)]
         public string Avatar { get; set; } = Avatars_Folder + Default_Avatar;
     }

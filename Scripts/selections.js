@@ -1,85 +1,141 @@
-﻿// script pour l'interface de gestion de sélection avec deux <select...>
+// script pour l'interface de gestion de sélection avec deux <select...>
 // auteur : Nicolas Chourot
 
 $(document).ready(initUI);
 
 function initUI() {
-
     sortAllSelect();
-    deSelectAll($('body'));
+    $('.selectionsGrid').each(function() {
+        deSelectAll($(this));
+    });
 
-    $('.UnselectedItems').change(function (e) {
-        let parent = $(this).parent();
-        parent.find('.UnselectedItems option:selected').each(function () {
-            parent.find(".SelectedItems option:selected").prop("selected", false);
-            parent.find('.AddSelection').show();
-            parent.find('.RemoveSelection').hide();
-            parent.find('.UnselectAll').show();
-        });
+    $(document).on('change', '.UnselectedItems', function (e) {
+        let grid = $(this).closest('.selectionsGrid');
+        if ($(this).find('option:selected').length > 0) {
+            grid.find(".SelectedItems option:selected").prop("selected", false);
+        }
+        updateGridState(grid);
         e.preventDefault();
     });
 
-    $('.SelectedItems').change(function (e) {
-        let parent = $(this).parent();
-        parent.find('option:selected').each(function () {
-            parent.find(".UnselectedItems option:selected").prop("selected", false);
-            parent.find('.AddSelection').hide();
-            parent.find('.RemoveSelection').show();
-            parent.find('.UnselectAll').show();
-        });
+    $(document).on('change', '.SelectedItems', function (e) {
+        let grid = $(this).closest('.selectionsGrid');
+        if ($(this).find('option:selected').length > 0) {
+            grid.find(".UnselectedItems option:selected").prop("selected", false);
+        }
+        updateGridState(grid);
         e.preventDefault();
     });
 
-    // Important afin que tous les éléments soient sélectionnés lors de la soumission du formulaire
     $(document).on('submit', 'form', function () {
         $('.SelectedItems option').prop('selected', true);
     });
 
-    $(".AddSelection").on('click', function () {
-        let parent = $(this).parent().parent();
-        parent.find('.UnselectedItems').first().find('option:selected').each(function () {
+    $(document).on('click', '.AddSelection', function () {
+        let grid = $(this).closest('.selectionsGrid');
+        grid.find('.UnselectedItems').find('option:selected').each(function () {
             $(this).remove();
-            parent.find('.SelectedItems').first().append($(this));
-            sortSelect(parent.find(".SelectedItems").first());
-            scrollTo(parent.find(".SelectedItems").first(), $(this).offset().top);
-            parent.find(".SelectedItems").focus();
+            $(this).prop('selected', false);
+            grid.find('.SelectedItems').append($(this));
+            sortSelect(grid.find(".SelectedItems"));
+            scrollTo(grid.find(".SelectedItems"), $(this).offset().top);
+            grid.find(".SelectedItems").focus();
         });
-        parent.find('.AddSelection').hide();
-        parent.find('.RemoveSelection').show();
-        parent.find('.UnselectAll').show();
+        updateGridState(grid);
     });
 
-    $(".RemoveSelection").on('click', function () {
-        let parent = $(this).parent().parent();
-        parent.find('.SelectedItems').first().find('option:selected').each(function () {
+    $(document).on('click', '.RemoveSelection', function () {
+        let grid = $(this).closest('.selectionsGrid');
+        grid.find('.SelectedItems').find('option:selected').each(function () {
             $(this).remove();
-            parent.find('.UnselectedItems').first().append($(this));
-            sortSelect(parent.find(".UnselectedItems").first());
-            scrollTo(parent.find(".UnselectedItems").first(), $(this).offset().top);
-            parent.find(".UnselectedItems").focus();
+            $(this).prop('selected', false);
+            grid.find('.UnselectedItems').append($(this));
+            sortSelect(grid.find(".UnselectedItems"));
+            scrollTo(grid.find(".UnselectedItems"), $(this).offset().top);
+            grid.find(".UnselectedItems").focus();
         });
-        parent.find('.AddSelection').show();
-        parent.find('.RemoveSelection').hide();
-        parent.find('.UnselectAll').show();
+        updateGridState(grid);
     });
 
-    $(".UnselectAll").on('click', function () {
-        let parent = $(this).parent().parent();
-        deSelectAll(parent);
+    $(document).on('click', '.UnselectAll', function () {
+        let grid = $(this).closest('.selectionsGrid');
+        deSelectAll(grid);
+    });
+
+    // Gestion du changement de layout basé sur l'état du premier <details>
+    $(document).on('toggle', 'details', function () {
+        updateLayout();
+    });
+
+    // Backup pour certains navigateurs où toggle ne suffit pas
+    $(document).on('click', 'summary', function() {
+        setTimeout(updateLayout, 10);
+    });
+
+    updateLayout();
+}
+
+function updateGridState(grid) {
+    let hasSelected = grid.find('.SelectedItems option:selected').length > 0;
+    let hasUnselected = grid.find('.UnselectedItems option:selected').length > 0;
+    let isStacked = grid.hasClass('stacked');
+
+    // Mise à jour des icônes selon le layout
+    let addIcon = grid.find('.AddSelection');
+    let removeIcon = grid.find('.RemoveSelection');
+
+    if (isStacked) {
+        addIcon.removeClass('fa-arrow-circle-left').addClass('fa-arrow-circle-up');
+        removeIcon.removeClass('fa-arrow-circle-right').addClass('fa-arrow-circle-down');
+    } else {
+        addIcon.removeClass('fa-arrow-circle-up').addClass('fa-arrow-circle-left');
+        removeIcon.removeClass('fa-arrow-circle-down').addClass('fa-arrow-circle-right');
+    }
+
+    if (hasUnselected) {
+        addIcon.show();
+        removeIcon.hide();
+        grid.find('.UnselectAll').show();
+    } else if (hasSelected) {
+        addIcon.hide();
+        removeIcon.show();
+        grid.find('.UnselectAll').show();
+    } else {
+        addIcon.hide();
+        removeIcon.hide();
+        grid.find('.UnselectAll').hide();
+    }
+}
+
+function updateLayout() {
+    let infoSection = $('details').filter(function() {
+        let text = $(this).find('summary').text().toLowerCase();
+        return text.indexOf('information') > -1 || text.indexOf('identification') > -1;
+    }).first();
+    
+    if (infoSection.length === 0) infoSection = $('details').first();
+
+    let grids = $('.selectionsGrid');
+    
+    if (infoSection.length > 0) {
+        if (!infoSection.prop('open')) {
+            grids.addClass('stacked');
+        } else {
+            grids.removeClass('stacked');
+        }
+    }
+    
+    grids.each(function() {
+        updateGridState($(this));
     });
 }
 
-function deSelectAll(parent) {
-    parent.find('.AddSelection').hide();
-    parent.find('.RemoveSelection').hide();
-    parent.find('.UnselectAll').hide();
-    parent.find('.SelectedItems option').prop('selected', false);
-    parent.find('.UnselectedItems option').prop('selected', false);
+function deSelectAll(grid) {
+    grid.find('.SelectedItems option').prop('selected', false);
+    grid.find('.UnselectedItems option').prop('selected', false);
+    updateGridState(grid);
 }
 
-///////////////////////////////////////////////////////////////////
-// Sort text items of a listbox
-///////////////////////////////////////////////////////////////////
 function normalize(str) {
     return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 }

@@ -11,7 +11,7 @@
             <div class="details-content-panel" style="padding: 15px;">
                 @foreach (var item in group)
                 {
-                    var course = item.Item2;@* Item2 est notre Cours *@
+                    var course = item.Item2;
                     <div class="course-row" style="margin-bottom: 10px;">
                         <a href="@Url.Action("Details", "Courses", new { id = course.Id })" style="color: black; text-decoration: none;">
                             <span style="color: #0066cc; font-weight: bold;">[@course.Session] @course.Code</span> @course.Title

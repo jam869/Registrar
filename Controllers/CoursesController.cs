@@ -125,10 +125,9 @@ namespace Registrar.Controllers
             return View(course);
         }
 
-        // --- MÉTHODE EDIT (POST) CORRIGÉE ---
         [HttpPost]
         [AccessControl.UserAccess(Access.Write)]
-        public ActionResult Edit(Course course, List<int> SelectedStudents) // <-- Ajout de SelectedStudents
+        public ActionResult Edit(Course course, List<int> SelectedStudents) 
         {
             if (ModelState.IsValid)
             {

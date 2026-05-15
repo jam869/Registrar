@@ -3,7 +3,6 @@
     var loggedUsersId = (List<int>)ViewBag.LoggedUsersId ?? new List<int>();
     int count = Model.Count();
 
-    // CORRECTION : On précise Registrar.Models.Login
     List<Registrar.Models.Login> logins = Model.ToList();
     int index = 0;
     bool first = true;

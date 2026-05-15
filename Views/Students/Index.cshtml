@@ -73,7 +73,6 @@
             $("#searchInput").on("keyup", applySearch);
             $("#yearFilter").on("change", applySearch);
 
-            // --- L'APPEL MANQUANT POUR CHARGER LA LISTE ---
             new AutoRefreshedPanel(
                 "studentsListContainer",
                 "@Url.Action("GetStudents")",

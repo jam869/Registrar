@@ -1,6 +1,5 @@
 @model Registrar.Models.Teacher
 
-@* Le titre dans le header est géré par le contrôleur (ViewBag.Title = "Professeur - Modification") *@
 
 @using (Html.BeginForm())
 {
@@ -8,7 +7,6 @@
     @Html.HiddenFor(model => model.Id)
     @Html.HiddenFor(model => model.Code)
 
-    @* Très important pour que l'image soit sauvegardée avec image-control.js *@
     @Html.HiddenFor(model => model.Avatar, new { id = "Avatar" })
 
     <div style="max-width: 800px; margin: auto;">
@@ -35,7 +33,6 @@
                 @Html.ValidationMessageFor(model => model.Phone, "", new { @class = "text-danger" })
 
                 <label>Date d'embauche</label>
-                @* Votre code parfait pour le champ de date *@
                 @Html.TextBoxFor(m => m.StartDate, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
                 @Html.ValidationMessageFor(model => model.StartDate, "", new { @class = "text-danger" })
             </fieldset>
@@ -44,7 +41,6 @@
         <details id="alloc_section" open style="margin-top: 20px;">
             <summary>Allocations : Session @Registrar.Models.NextSession.Caption</summary>
             <fieldset style="border:none !important; padding: 20px !important;">
-                @* L'outil de sélection (Double Liste) *@
                 @Helper.SelectionLists("SelectedCourses", (SelectList)ViewBag.Allocations, (SelectList)ViewBag.Courses)
             </fieldset>
         </details>
@@ -59,7 +55,6 @@
 
     <script>
         $(document).ready(function () {
-            // Applique le format automatique au numéro de téléphone (999) 999-9999
             if ($.fn.mask) {
                 $('.phone').mask('(999) 999-9999');
             }

@@ -27,7 +27,6 @@ namespace Registrar.Models
         [Required(ErrorMessage = "Téléphone manquant")]
         [RegularExpression(@"^\(\d{3}\) \d{3}-\d{4}$", ErrorMessage = "Format: (000) 000-0000")]
         public string Phone { get; set; }
-        // Cette propriété génère l'affichage : "Code Nom Prénom"
         public string Name => $"{Code} {LastName} {FirstName}";
        [JsonIgnore] public int Year => int.Parse(Code.Substring(0, 4)); 
     }

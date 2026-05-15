@@ -222,8 +222,8 @@ $(document).ready(function () {
 
 function bootboxConfirmDelete(url, controller) {
     bootbox.confirm({
-        closeButton: false, // Enlève le X en haut à droite
-        message: "Effacer ?", // JUSTE le message
+        closeButton: false, 
+        message: "Effacer ?", 
         buttons: {
             cancel: { label: 'Annuler', className: 'btn-secondary' },
             confirm: { label: "D'accord", className: 'btn-primary' }
