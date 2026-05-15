@@ -146,7 +146,7 @@ mark {
     }
 
 .studentCode, .teacherCode, .courseCode {
-    color: #0066cc; /* Le bleu exact des numéros d'admission */
+    color: #0066cc; /* Le bleu exact des numÃ©ros d'admission */
     font-weight: bold;
     min-width: 110px; /* Aligne parfaitement les noms qui suivent */
     margin-right: 15px;
@@ -156,7 +156,7 @@ mark {
     color: #333;
 }
 
-/* Style des en-têtes de détails (Nom en gros) */
+/* Style des en-tÃªtes de dÃ©tails (Nom en gros) */
 .details-header {
     font-size: 24px;
     font-weight: bold;
@@ -165,7 +165,7 @@ mark {
     padding-bottom: 5px;
 }
 
-/* Icônes dans les vues détails */
+/* IcÃ´nes dans les vues dÃ©tails */
 .detail-row {
     margin-bottom: 10px;
     font-size: 16px;
@@ -202,7 +202,7 @@ mark {
     font-size: 1.1em;
 }
 
-/* Style des icônes dans les pages détails */
+/* Style des icÃ´nes dans les pages dÃ©tails */
 .detail-row {
     margin-bottom: 12px;
     font-size: 1.1em;
@@ -228,11 +228,11 @@ mark {
 
 .active-nav {
     font-weight: bold !important; /* Met le texte en gras */
-    color: #000 !important; /* Met le texte en noir foncé */
-    border-bottom: none !important; /* ENLÈVE LE SOULIGNEMENT */
-    text-decoration: none !important; /* Sécurité supplémentaire */
+    color: #000 !important; /* Met le texte en noir foncÃ© */
+    border-bottom: none !important; /* ENLÃˆVE LE SOULIGNEMENT */
+    text-decoration: none !important; /* SÃ©curitÃ© supplÃ©mentaire */
 }
-/* Assurez-vous que le dropdown Bootstrap s'aligne bien à droite */
+/* Assurez-vous que le dropdown Bootstrap s'aligne bien Ã  droite */
 .dropdown-menu-end {
     right: 0;
     left: auto;
@@ -248,7 +248,7 @@ mark {
     height: 60px;
     background-color: white;
     border-bottom: 1px solid #ddd;
-    margin-bottom: 15px; /* Évite que ça colle au contenu en dessous */
+    margin-bottom: 15px; /* Ã©vite que Ã§a colle au contenu en dessous */
 }
 
 /* La section GAUCHE : Logo + Titre/Nav */
@@ -256,7 +256,7 @@ mark {
     display: flex;
     align-items: center;
     gap: 15px;
-    overflow: hidden; /* Empêche les débordements */
+    overflow: hidden; /* EmpÃªche les dÃ©bordements */
 }
 
 .siteIcon {
@@ -277,7 +277,7 @@ mark {
     white-space: nowrap; /* GARDE SUR UNE LIGNE */
     overflow: hidden;
     text-overflow: ellipsis;
-    margin: 0; /* Enlève les marges par défaut */
+    margin: 0; /* EnlÃ¨ve les marges par dÃ©faut */
 }
 
 /* Navigation principale */
@@ -313,7 +313,7 @@ mark {
     gap: 15px;
 }
 
-/* Assure que le menu hamburger ne dépasse pas l'écran */
+/* Assure que le menu hamburger ne dÃ©passe pas l'Ã©cran */
 .dropdown-menu-end {
     right: 0 !important;
     left: auto !important;
@@ -356,7 +356,7 @@ mark {
     border-radius: 8px;
     cursor: pointer;
     font-weight: bold;
-    list-style: none; /* Enlève la flèche par défaut */
+    list-style: none; /* EnlÃ¨ve la flÃ¨che par dÃ©faut */
     border: 1px solid #ccc;
     display: flex;
     align-items: center;
@@ -381,12 +381,12 @@ mark {
 }
 
 .bootbox .modal-content {
-    border-radius: 0 !important; /* Fenêtre parfaitement carrée */
+    border-radius: 0 !important; /* FenÃªtre parfaitement carrÃ©e */
     border: 1px solid #ccc;
 }
 
 .bootbox .modal-header {
-    display: none !important; /* Détruit complètement la zone de titre */
+    display: none !important; /* DÃ©truit complÃ¨tement la zone de titre */
 }
 
 .bootbox .bootbox-body {
@@ -396,10 +396,10 @@ mark {
 }
 
 .bootbox .modal-footer {
-    border-top: none; /* Enlève la ligne au-dessus des boutons */
+    border-top: none; /* EnlÃ¨ve la ligne au-dessus des boutons */
 }
 
-/* Boutons carrés */
+/* Boutons carrÃ©s */
 .bootbox .btn {
     border-radius: 0 !important;
 }
@@ -411,7 +411,7 @@ mark {
     color: white !important;
 }
 
-/* Boutons carrés */
+/* Boutons carrÃ©s */
 .bootbox .btn {
     border-radius: 0 !important;
 }
@@ -422,9 +422,9 @@ mark {
     border-color: #0055aa !important;
     color: white !important;
 }
-/* Bouton X : Carré bleu avec X blanc */
+/* Bouton X : CarrÃ© bleu avec X blanc */
 .btn-close-square {
-    background-color: #0066cc !important; /* Bleu de l'école */
+    background-color: #0066cc !important; /* Bleu de l'Ã©cole */
     color: white !important; /* X en blanc */
     width: 24px;
     height: 24px;
@@ -438,7 +438,7 @@ mark {
 }
 
     .btn-close-square:hover {
-        background-color: #004c99 !important; /* Bleu un peu plus foncé au survol */
+        background-color: #004c99 !important; /* Bleu un peu plus foncÃ© au survol */
         color: white !important;
     }
 .form-horizontal-row {

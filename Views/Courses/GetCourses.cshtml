@@ -1,7 +1,7 @@
 @model IEnumerable<Registrar.Models.Course>
 
 @{
-    // Récupère les numéros de sessions uniques (1, 2, 3...)
+    // RÃ©cupÃ¨re les numÃ©ros de sessions uniques (1, 2, 3...)
     var sessions = Model.Select(c => c.Session).Distinct().OrderBy(s => s);
 }
 
@@ -15,7 +15,7 @@
             @foreach (var item in courses)
             {
                 <div class="CoursesListLayout">
-                    @* Le clic mène maintenant à la page Détails, par souci de cohérence *@
+                    @* Le clic mÃ¨ne maintenant Ã  la page DÃ©tails, par souci de cohÃ©rence *@
                     <a href="@Url.Action("Details", new { id = item.Id })">
                         <span class="courseCode">@item.Code</span>
                         <span class="courseName">@item.Title</span>

@@ -35,7 +35,7 @@ namespace Registrar.Controllers
             if (forceRefresh || DB.Teachers.HasChanged)
             {
                 var teacher = DB.Teachers.Get(id);
-                if (teacher == null) return HttpNotFound();
+                if (teacher == null) return null;
                 return PartialView("_TeacherInfo", teacher);
             }   
             return null;

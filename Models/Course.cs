@@ -14,7 +14,7 @@ namespace Registrar.Models
         public string Title { get; set; }
 
         [Required(ErrorMessage = "La session est requise")]
-        [Range(1, 6, ErrorMessage = "La session doit être entre 1 et 6")]
+        [Range(1, 6, ErrorMessage = "La session doit Ãªtre entre 1 et 6")]
         public int Session { get; set; }
 
         public List<int> Inscriptions { get; set; } = new List<int>();

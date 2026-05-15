@@ -43,30 +43,30 @@
                                 $(this).html(originalText.replace(regex, "<mark>$1</mark>"));
                             });
                         } else {
-                            // Enl�ve la surbrillance
+                            // Enlève la surbrillance
                             row.find('.courseName, .courseCode').each(function () {
                                 $(this).html($(this).text().replace(/(<mark>|<\/mark>)/igm, ""));
                             });
                         }
                     } else {
-                        row.hide(); // Cache si �a ne correspond pas
+                        row.hide(); // Cache si ça ne correspond pas
                     }
                 });
             }
 
             $("#searchInput").on("keyup", applySearch);
 
-            // G�re le rafra�chissement automatique
+            // Gère le rafraîchissement automatique
             new AutoRefreshedPanel(
                 "coursesListContainer",
                 "@Url.Action("GetCourses")",
                 5,
                 function () {
-                    // Restaure l'�tat des balises details (ouvert/ferm�)
+                    // Restaure l'état des balises details (ouvert/fermé)
                     if (typeof RestoreDetailsState === "function") {
                         RestoreDetailsState();
                     }
-                    // R�applique le filtre pour ne pas perdre la recherche
+                    // Réapplique le filtre pour ne pas perdre la recherche
                     applySearch();
                 }
             );
