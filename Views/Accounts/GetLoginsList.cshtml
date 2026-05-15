@@ -51,11 +51,11 @@
                                         }
                                     }
 
-                                    @if (login.IpAddress != "::1" && login.CountryCode != null)
+                                    <div>
+                                        @Helper.CountryFlag(login.CountryCode)
+                                    </div>
+                                    @if (login.IpAddress != "::1")
                                     {
-                                        <div>
-                                            @Helper.CountryFlag(login.CountryCode)
-                                        </div>
                                         <div class="extraJournalInfo IP_Address">
                                             @login.IpAddress, @login.City, @login.RegionName
                                         </div>
