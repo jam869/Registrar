@@ -118,16 +118,25 @@ namespace Registrar.Controllers
         [AccessControl.UserAccess(Access.View)]
         public ActionResult Details(int id)
         {
-            Teacher teacher = Teachers.Get(id);
+            Teacher teacher = DAL.DB.Teachers.Get(id);
             if (teacher == null) return HttpNotFound();
-
             ViewBag.Title = "Professeur - Détails";
 
-            // On cherche tous les cours où ce professeur est alloué (peu importe l'année)
-            ViewBag.AllocatedCourses = DAL.DB.Courses.ToList()
-                .Where(c => c.Allocations.Values.Contains(id))
-                .OrderBy(c => c.Session)
-                .ThenBy(c => c.Code)
+            var allocationsList = new List<Tuple<int, Course>>();
+            foreach (var c in DAL.DB.Courses.ToList())
+            {
+                foreach (var a in c.Allocations)
+                {
+                    if (a.Value == id)
+                    {
+                        allocationsList.Add(new Tuple<int, Course>(a.Key, c));
+                    }
+                }
+            }
+
+            ViewBag.GroupedAllocations = allocationsList
+                .GroupBy(x => x.Item1)
+                .OrderByDescending(g => g.Key)
                 .ToList();
 
             return View(teacher);

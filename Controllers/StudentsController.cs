@@ -143,15 +143,18 @@ namespace Registrar.Controllers
         {
             Student student = Students.Get(id);
             if (student == null) return HttpNotFound();
+
             ViewBag.Title = "Étudiants - Détails";
-            // On récupère la liste des cours auxquels l'étudiant est inscrit
-            ViewBag.EnrolledCourses = Courses.ToList()
-                .Where(c => c.Inscriptions.Contains(id))
-                .OrderBy(c => c.Session)
-                .ThenBy(c => c.Code)
+
+            var courses = Courses.ToList().Where(c => c.Inscriptions.Contains(id)).ToList();
+
+            // Calcul exact : (Session 1 et 2 = +0 an), (Session 3 et 4 = +1 an), etc.
+            ViewBag.GroupedInscriptions = courses
+                .GroupBy(c => student.Year + ((c.Session - 1) / 2))
+                .OrderByDescending(g => g.Key)
                 .ToList();
 
             return View(student);
-        }   
+        }
     }
 }
