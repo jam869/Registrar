@@ -1,6 +1,6 @@
 @model Registrar.Models.Course
 @{
-    ViewBag.Title = "Cours - D�tails";
+    ViewBag.Title = "Cours - Détails";
 }
 
 <div style="max-width: 900px; margin: auto;">
@@ -8,7 +8,7 @@
         @{ Html.RenderAction("GetCourseInfo", new { id = Model.Id, forceRefresh = true }); }
     </div>
 
-    <div id="enrolledStudentsContainer">
+    <div id="courseStudentsContainer">
         @{ Html.RenderAction("GetCourseStudents", new { id = Model.Id, forceRefresh = true }); }
     </div>
 </div>
@@ -16,8 +16,27 @@
 @section Scripts {
     <script>
         $(document).ready(function () {
-            new AutoRefreshedPanel("courseInfoContainer", "@Url.Action("GetCourseInfo", new { id = Model.Id })", 5);
-            new AutoRefreshedPanel("enrolledStudentsContainer", "@Url.Action("GetCourseStudents", new { id = Model.Id })", 5);
+            new AutoRefreshedPanel(
+                "courseInfoContainer",
+                "@Url.Action("GetCourseInfo", new { id = Model.Id })",
+                5,
+                function (data) {
+                    if (data === null || data.trim() === "") {
+                        bootbox.alert({
+                            message: "Ce cours a été effacé ou n'est plus disponible.",
+                            callback: function () {
+                                window.location.href = "@Url.Action("Index")";
+                            }
+                        });
+                    }
+                }
+            );
+
+            new AutoRefreshedPanel(
+                "courseStudentsContainer",
+                "@Url.Action("GetCourseStudents", new { id = Model.Id })",
+                5
+            );
         });
     </script>
 }

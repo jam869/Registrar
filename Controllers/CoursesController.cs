@@ -43,7 +43,6 @@ namespace Registrar.Controllers
         [AccessControl.UserAccess(Access.View)]
         public ActionResult GetCourseStudents(int id, bool forceRefresh = false)
         {
-            // On ajoute DB.Teachers.HasChanged car la vue affiche le nom de l'enseignant !
             if (forceRefresh || DB.Courses.HasChanged || DB.Students.HasChanged || DB.Teachers.HasChanged)
             {
                 var course = DB.Courses.Get(id);
@@ -54,17 +53,16 @@ namespace Registrar.Controllers
                     .OrderBy(s => s.LastName)
                     .ToList();
 
-                // On recrée le groupement par année (Cohorte) pour que la vue l'affiche correctement
                 ViewBag.GroupedInscriptions = enrolledStudents
                     .GroupBy(s => s.Year)
                     .OrderByDescending(g => g.Key)
                     .ToList();
 
-                // CORRECTION : On envoie "course" comme modèle (au lieu de la liste enrolledStudents)
                 return PartialView("_CourseStudents", course);
             }
             return null;
         }
+
         [AccessControl.UserAccess(Access.Write)]
         public ActionResult Create()
         {
@@ -89,15 +87,12 @@ namespace Registrar.Controllers
             Course course = Courses.Get(id);
             if (course == null) return HttpNotFound();
 
-            ViewBag.Title = "Cours - Détails";
+            ViewBag.Title = "Cours - DÃ©tails";
 
-            // 1. On récupère tous les étudiants inscrits à ce cours
             var enrolledStudents = DB.Students.ToList()
                 .Where(s => course.Inscriptions.Contains(s.Id))
                 .ToList();
 
-            // 2. On groupe ces étudiants par année (cohorte) décroissante
-            // On passe ce groupe à la vue
             ViewBag.GroupedInscriptions = enrolledStudents
                 .GroupBy(s => s.Year)
                 .OrderByDescending(g => g.Key)
@@ -106,7 +101,6 @@ namespace Registrar.Controllers
             return View(course);
         }
 
-        // GET: Courses/Edit/5
         [AccessControl.UserAccess(Access.Write)]
         public ActionResult Edit(int id)
         {
@@ -115,7 +109,6 @@ namespace Registrar.Controllers
 
             ViewBag.Title = "Cours - Modification";
 
-            // Préparation des listes pour l'outil de sélection (double liste)
             var allStudents = DB.Students.ToList().OrderBy(s => s.LastName).ThenBy(s => s.FirstName).ToList();
             var enrolledStudents = allStudents.Where(s => course.Inscriptions.Contains(s.Id)).ToList();
 
@@ -131,13 +124,11 @@ namespace Registrar.Controllers
         {
             if (ModelState.IsValid)
             {
-                // On met à jour les étudiants avec ceux sélectionnés à l'écran
                 course.Inscriptions = SelectedStudents ?? new List<int>();
                 Courses.Update(course);
                 return RedirectToAction("Index");
             }
 
-            // Si le formulaire est invalide (ex: titre vide), on recharge la page
             return RedirectToAction("Edit", new { id = course.Id });
         }
 

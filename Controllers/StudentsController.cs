@@ -14,8 +14,6 @@ namespace Registrar.Controllers
         private DAL.Repository<Student> Students => DB.Students;
         private DAL.Repository<Course> Courses => DB.Courses;
 
-        // GET: Students/Edit/5
-        // GET: Students/Edit/5
         [AccessControl.UserAccess(Access.Write)]
         public ActionResult Edit(int id)
         {
@@ -25,7 +23,6 @@ namespace Registrar.Controllers
             var validSessions = NextSession.ValidSessions;
             var allCourses = Courses.ToList().Where(c => validSessions.Contains(c.Session)).OrderBy(c => c.Code).ToList();
 
-            // On trouve les cours de l'étudiant
             var registeredCourses = allCourses.Where(c => c.Inscriptions.Contains(id)).ToList();
 
             ViewBag.Courses = SelectListUtilities<Course>.Convert(allCourses);
@@ -37,7 +34,6 @@ namespace Registrar.Controllers
         [AccessControl.UserAccess(Access.View)]
         public ActionResult GetStudentInfo(int id, bool forceRefresh = false)
         {
-            // Rafraîchit si un changement a eu lieu dans les étudiants
             if (forceRefresh || Students.HasChanged)
             {
                 var student = Students.Get(id);
@@ -50,7 +46,6 @@ namespace Registrar.Controllers
         [AccessControl.UserAccess(Access.View)]
         public ActionResult GetStudentInscriptions(int id, bool forceRefresh = false)
         {
-            // Rafraîchit si un changement a eu lieu dans les étudiants OU les cours
             if (forceRefresh || Students.HasChanged || Courses.HasChanged)
             {
                 var student = Students.Get(id);
@@ -58,7 +53,6 @@ namespace Registrar.Controllers
 
                 var courses = Courses.ToList().Where(c => c.Inscriptions.Contains(id)).ToList();
 
-                // Le calcul des années
                 ViewBag.GroupedInscriptions = courses
                     .GroupBy(c => student.Year + ((c.Session - 1) / 2))
                     .OrderByDescending(g => g.Key)
@@ -68,6 +62,7 @@ namespace Registrar.Controllers
             }
             return null;
         }
+
         [HttpPost]
         [AccessControl.UserAccess(Access.Write)]
         public ActionResult Edit(Student student, List<int> SelectedCourses)
@@ -76,7 +71,6 @@ namespace Registrar.Controllers
             {
                 Students.Update(student);
 
-                // Mise à jour de la relation dans les cours
                 var validSessions = NextSession.ValidSessions;
                 var currentSessionCourses = Courses.ToList().Where(c => validSessions.Contains(c.Session)).ToList();
 
@@ -105,24 +99,23 @@ namespace Registrar.Controllers
 
             return View(student);
         }
-        // GET: Students
+
         [AccessControl.UserAccess(Access.View)]
         public ActionResult Index()
         {
-            // On récupère la liste des étudiants pour l'afficher
             return View(Students.ToList().OrderBy(s => s.LastName).ToList());
         }
-        // Cette action sera appelée en boucle par JavaScript (AJAX)
+
         [AccessControl.UserAccess(Access.View)]
         public ActionResult GetStudents(bool forceRefresh = false)
         {
-            // On vérifie si la DB a changé ou si c'est le premier chargement
             if (forceRefresh || Students.HasChanged)
             {
                 return PartialView(Students.ToList().OrderBy(s => s.LastName).ToList());
             }
-            return null; // Si rien n'a changé, on ne renvoie rien (économise la bande passante)
+            return null;
         }
+
         [AccessControl.UserAccess(Access.View)]
         public ActionResult GetInscriptions(int id, bool forceRefresh = false)
         {
@@ -150,7 +143,6 @@ namespace Registrar.Controllers
             return View(new Student());
         }
 
-      
         [HttpPost]
         [AccessControl.UserAccess(Access.Write)]
         public ActionResult Create(Student student)
@@ -159,7 +151,6 @@ namespace Registrar.Controllers
 
             if (ModelState.IsValid)
             {
-                // Génération automatique du code (Année + 6 chiffres aléatoires)
                 Random rnd = new Random();
                 student.Code = DateTime.Now.Year.ToString() + rnd.Next(100000, 999999).ToString();
 
@@ -175,7 +166,7 @@ namespace Registrar.Controllers
             Student student = Students.Get(id);
             if (student == null) return HttpNotFound();
 
-            ViewBag.Title = "Étudiants - Détails";
+            ViewBag.Title = "Ã‰tudiants - DÃ©tails";
 
             var courses = Courses.ToList().Where(c => c.Inscriptions.Contains(id)).ToList();
 
@@ -185,6 +176,24 @@ namespace Registrar.Controllers
                 .ToList();
 
             return View(student);
+        }
+
+        [AccessControl.UserAccess(Access.Write)]
+        public ActionResult Delete(int id)
+        {
+            var student = Students.Get(id);
+            if (student != null)
+            {
+                var coursesWithStudent = Courses.ToList().Where(c => c.Inscriptions.Contains(id)).ToList();
+                foreach (var course in coursesWithStudent)
+                {
+                    course.Inscriptions.Remove(id);
+                    Courses.Update(course);
+                }
+
+                Students.Delete(id);
+            }
+            return RedirectToAction("Index");
         }
     }
 }

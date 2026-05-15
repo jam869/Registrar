@@ -6,10 +6,10 @@ namespace Registrar.Models
 {
     public class Student : DAL.Record
     {
-        [Required(ErrorMessage = "Numéro manquant")]
+        [Required(ErrorMessage = "NumÃ©ro manquant")]
         public string Code { get; set; }
 
-        [Required(ErrorMessage = "Prénom manquant")]
+        [Required(ErrorMessage = "PrÃ©nom manquant")]
         public string FirstName { get; set; }
 
         [Required(ErrorMessage = "Nom manquant")]
@@ -24,10 +24,10 @@ namespace Registrar.Models
         [EmailAddress(ErrorMessage = "Invalide")]
         public string Email { get; set; }
 
-        [Required(ErrorMessage = "Téléphone manquant")]
+        [Required(ErrorMessage = "TÃ©lÃ©phone manquant")]
         [RegularExpression(@"^\(\d{3}\) \d{3}-\d{4}$", ErrorMessage = "Format: (000) 000-0000")]
         public string Phone { get; set; }
         public string Name => $"{Code} {LastName} {FirstName}";
-       [JsonIgnore] public int Year => int.Parse(Code.Substring(0, 4)); 
+       [JsonIgnore] public int Year => (Code != null && Code.Length >= 4) ? int.Parse(Code.Substring(0, 4)) : 0; 
     }
 }

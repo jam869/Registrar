@@ -29,7 +29,7 @@ namespace Registrar.Controllers
             return null;
         }
 
-        [AccessControl.UserAccess(Access.View)]
+        [AccessControl.UserAccess(Access.View)] 
         public ActionResult GetTeacherInfo(int id, bool forceRefresh = false)
         {
             if (forceRefresh || DB.Teachers.HasChanged)
@@ -37,14 +37,13 @@ namespace Registrar.Controllers
                 var teacher = DB.Teachers.Get(id);
                 if (teacher == null) return HttpNotFound();
                 return PartialView("_TeacherInfo", teacher);
-            }
+            }   
             return null;
         }
 
         [AccessControl.UserAccess(Access.View)]
         public ActionResult GetTeacherAllocations(int id, bool forceRefresh = false)
         {
-            // On rafraîchit si le prof OU les cours (allocations) ont changé
             if (forceRefresh || DB.Teachers.HasChanged || DB.Courses.HasChanged)
             {
                 var teacher = DB.Teachers.Get(id);
@@ -84,7 +83,6 @@ namespace Registrar.Controllers
 
             if (ModelState.IsValid)
             {
-                // Génération automatique : CLG-420- + 5 chiffres aléatoires
                 Random rnd = new Random();
                 teacher.Code = "CLG-420-" + rnd.Next(10000, 99999).ToString();
 
@@ -110,7 +108,6 @@ namespace Registrar.Controllers
 
                 foreach (var course in allCourses)
                 {
-                    // On ne traite que les cours de la session courante (Hiver ou Automne)
                     if (!validSessions.Contains(course.Session)) continue;
 
                     bool shouldBeAssigned = SelectedCourses != null && SelectedCourses.Contains(course.Id);
@@ -118,13 +115,11 @@ namespace Registrar.Controllers
 
                     if (shouldBeAssigned && !isCurrentlyAssigned)
                     {
-                        // On ajoute le prof au cours
                         course.Allocations[currentYear] = teacher.Id;
-                        DAL.DB.Courses.Update(course); // Ne plantera plus !
+                        DAL.DB.Courses.Update(course);
                     }
                     else if (!shouldBeAssigned && isCurrentlyAssigned)
                     {
-                        // On retire le prof du cours car il a été désélectionné
                         course.Allocations.Remove(currentYear);
                         DAL.DB.Courses.Update(course); 
                     }
@@ -145,7 +140,22 @@ namespace Registrar.Controllers
         [AccessControl.UserAccess(Access.Write)]
         public ActionResult Delete(int id)
         {
-            Teachers.Delete(id);
+            var teacher = Teachers.Get(id);
+            if (teacher != null)
+            {
+                var coursesWithTeacher = DAL.DB.Courses.ToList().Where(c => c.Allocations.Values.Contains(id)).ToList();
+                foreach (var course in coursesWithTeacher)
+                {
+                    var years = course.Allocations.Where(a => a.Value == id).Select(a => a.Key).ToList();
+                    foreach (var year in years)
+                    {
+                        course.Allocations.Remove(year);
+                    }
+                    DAL.DB.Courses.Update(course);
+                }
+
+                Teachers.Delete(id);
+            }
             return RedirectToAction("Index");
         }
 
@@ -155,9 +165,8 @@ namespace Registrar.Controllers
             Teacher teacher = DAL.DB.Teachers.Get(id);
             if (teacher == null) return HttpNotFound();
 
-            ViewBag.Title = "Professeur - Détails";
+            ViewBag.Title = "Professeur - DÃ©tails";
 
-            // 1. On force la création d'une liste explicite de Tuples pour éviter le type anonyme
             var allocationsList = new List<Tuple<int, Course>>();
 
             foreach (var c in DAL.DB.Courses.ToList())
@@ -166,13 +175,11 @@ namespace Registrar.Controllers
                 {
                     if (a.Value == id)
                     {
-                        // Ajout explicite d'un Tuple <Année, Cours>
                         allocationsList.Add(new Tuple<int, Course>(a.Key, c));
                     }
                 }
             }
 
-            // 2. On groupe cette liste sécurisée
             ViewBag.GroupedAllocations = allocationsList
                 .GroupBy(x => x.Item1)
                 .OrderByDescending(g => g.Key)
@@ -189,7 +196,6 @@ namespace Registrar.Controllers
 
             ViewBag.Title = "Professeur - Modification";
 
-            // On prépare la double liste pour la session courante uniquement
             int currentYear = Registrar.Models.NextSession.Year;
             var allCourses = DAL.DB.Courses.ToList()
                 .Where(c => Registrar.Models.NextSession.ValidSessions.Contains(c.Session))

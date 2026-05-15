@@ -11,7 +11,16 @@
 @section Scripts {
     <script>
         $(document).ready(function () {
-            $("#toggleSearchBtn").click(function () { $("#searchPanel").slideToggle(); $("#searchInput").focus(); });
+            $("#toggleSearchBtn").click(function () { 
+                $("#searchPanel").slideToggle(400, function() {
+                    if (!$(this).is(':visible')) {
+                        $("#searchInput").val("");
+                        applySearch();
+                    } else {
+                        $("#searchInput").focus();
+                    }
+                });
+            });
 
             function applySearch() {
                 let keyword = $("#searchInput").val().toLowerCase();
@@ -25,6 +34,10 @@
                             row.find('.teacherName, .teacherCode').each(function () {
                                 let original = $(this).text().replace(/(<mark>|<\/mark>)/igm, "");
                                 $(this).html(original.replace(regex, "<mark>$1</mark>"));
+                            });
+                        } else {
+                            row.find('.teacherName, .teacherCode').each(function () {
+                                $(this).html($(this).text().replace(/(<mark>|<\/mark>)/igm, ""));
                             });
                         }
                     } else { row.hide(); }

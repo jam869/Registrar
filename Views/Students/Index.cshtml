@@ -8,7 +8,7 @@
         <div id="searchPanel" style="display:none; margin-top:10px; background:#f9f9f9; padding:10px; border-radius:5px;">
             <input type="text" id="searchInput" class="form-control" placeholder="Rechercher par nom ou code..." style="display:inline-block; width:200px; margin-right:10px;" />
             <select id="yearFilter" class="form-control" style="display:inline-block; width:150px;">
-                <option value="all">Toutes les années</option>
+                <option value="all">Toutes les annÃ©es</option>
                 <option value="2026">2026</option>
                 <option value="2025">2025</option>
             </select>
@@ -25,7 +25,13 @@
     <script>
        $(document).ready(function () {
     $("#toggleSearchBtn").click(function () {
-        $("#searchPanel").slideToggle();
+        $("#searchPanel").slideToggle(400, function() {
+            if (!$(this).is(':visible')) {
+                $("#searchInput").val("");
+                $("#yearFilter").val("all");
+                applySearch();
+            }
+        });
     });
 
 
@@ -35,13 +41,13 @@
                 let keyword = $("#searchInput").val().toLowerCase();
                 let yearFilter = $("#yearFilter").val();
 
-                // Parcourir chaque étudiant
+                // Parcourir chaque Ã©tudiant
                 $(".StudentListLayout").each(function () {
                     let row = $(this);
                     let textToSearch = row.text().toLowerCase();
                     let parentDetails = row.closest('details');
 
-                    // Sécurise la recherche de l'année au cas où la balise summary n'est pas encore chargée
+                    // SÃ©curise la recherche de l'annÃ©e au cas oÃ¹ la balise summary n'est pas encore chargÃ©e
                     let summaryText = parentDetails.find('summary').text();
                     let cohorteYear = summaryText ? summaryText.replace('Cohorte ', '').trim() : "";
 
@@ -50,7 +56,7 @@
 
                     if (matchKeyword && matchYear) {
                         row.show();
-                        // Application de la surbrillance si un mot clé est tapé
+                        // Application de la surbrillance si un mot clÃ© est tapÃ©
                         if (keyword !== "") {
                             let regex = new RegExp("(" + keyword + ")", "gi");
                             row.find('.studentName, .studentCode').each(function () {
@@ -69,7 +75,7 @@
                 });
             }
 
-            // Déclencher la recherche quand l'usager tape ou change l'année
+            // DÃ©clencher la recherche quand l'usager tape ou change l'annÃ©e
             $("#searchInput").on("keyup", applySearch);
             $("#yearFilter").on("change", applySearch);
 
@@ -78,11 +84,11 @@
                 "@Url.Action("GetStudents")",
                 5,
                 function () {
-                    // 1. Restaure l'état ouvert/fermé des cohortes
+                    // 1. Restaure l'Ã©tat ouvert/fermÃ© des cohortes
                     if (typeof RestoreDetailsState === "function") {
                         RestoreDetailsState();
                     }
-                    // 2. Réapplique la recherche pour ne pas perdre le filtre en cours
+                    // 2. RÃ©applique la recherche pour ne pas perdre le filtre en cours
                     applySearch();
                 }
             );

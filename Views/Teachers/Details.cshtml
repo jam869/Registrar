@@ -1,6 +1,6 @@
 @model Registrar.Models.Teacher
 @{
-    ViewBag.Title = "Professeur - D�tails";
+    ViewBag.Title = "Professeur - Détails";
 }
 
 <div style="max-width: 900px; margin: auto;">
@@ -16,7 +16,21 @@
 @section Scripts {
     <script>
         $(document).ready(function () {
-            new AutoRefreshedPanel("teacherInfoContainer", "@Url.Action("GetTeacherInfo", new { id = Model.Id })", 5);
+            new AutoRefreshedPanel(
+                "teacherInfoContainer", 
+                "@Url.Action("GetTeacherInfo", new { id = Model.Id })", 
+                5,
+                function (htmlContent) {
+                    if (!htmlContent || htmlContent.trim() === "") {
+                        bootbox.alert({
+                            message: "Ce professeur a été effacé ou n'est plus disponible.",
+                            callback: function () {
+                                window.location.href = "@Url.Action("Index")";
+                            }
+                        });
+                    }
+                }
+            );
             new AutoRefreshedPanel("allocationsContainer", "@Url.Action("GetTeacherAllocations", new { id = Model.Id })", 5);
         });
     </script>

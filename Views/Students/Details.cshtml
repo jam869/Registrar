@@ -1,6 +1,6 @@
 @model Registrar.Models.Student
 @{
-    ViewBag.Title = "�tudiant - D�tails";
+    ViewBag.Title = "Étudiant - Détails";
 }
 
 <div style="max-width: 900px; margin: auto;">
@@ -16,11 +16,21 @@
 @section Scripts {
     <script>
         $(document).ready(function () {
-            // Rafra�chissement automatique toutes les 5 secondes
+            // Rafraîchissement automatique toutes les 5 secondes
             new AutoRefreshedPanel(
                 "studentInfoContainer",
                 "@Url.Action("GetStudentInfo", new { id = Model.Id })",
-                5
+                5,
+                function (htmlContent) {
+                    if (!htmlContent || htmlContent.trim() === "") {
+                        bootbox.alert({
+                            message: "Cet étudiant a été effacé ou n'est plus disponible.",
+                            callback: function () {
+                                window.location.href = "@Url.Action("Index")";
+                            }
+                        });
+                    }
+                }
             );
 
             new AutoRefreshedPanel(

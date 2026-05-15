@@ -15,8 +15,14 @@
         $(document).ready(function () {
             // Fait descendre la barre de recherche au clic sur la loupe
             $("#toggleSearchBtn").click(function () {
-                $("#searchPanel").slideToggle();
-                $("#searchInput").focus();
+                $("#searchPanel").slideToggle(400, function() {
+                    if (!$(this).is(':visible')) {
+                        $("#searchInput").val("");
+                        applySearch();
+                    } else {
+                        $("#searchInput").focus();
+                    }
+                });
             });
 
             // Fonction de filtre et de surbrillance
@@ -37,30 +43,30 @@
                                 $(this).html(originalText.replace(regex, "<mark>$1</mark>"));
                             });
                         } else {
-                            // Enlève la surbrillance
+                            // Enlï¿½ve la surbrillance
                             row.find('.courseName, .courseCode').each(function () {
                                 $(this).html($(this).text().replace(/(<mark>|<\/mark>)/igm, ""));
                             });
                         }
                     } else {
-                        row.hide(); // Cache si ça ne correspond pas
+                        row.hide(); // Cache si ï¿½a ne correspond pas
                     }
                 });
             }
 
             $("#searchInput").on("keyup", applySearch);
 
-            // Gère le rafraîchissement automatique
+            // Gï¿½re le rafraï¿½chissement automatique
             new AutoRefreshedPanel(
                 "coursesListContainer",
                 "@Url.Action("GetCourses")",
                 5,
                 function () {
-                    // Restaure l'état des balises details (ouvert/fermé)
+                    // Restaure l'ï¿½tat des balises details (ouvert/fermï¿½)
                     if (typeof RestoreDetailsState === "function") {
                         RestoreDetailsState();
                     }
-                    // Réapplique le filtre pour ne pas perdre la recherche
+                    // Rï¿½applique le filtre pour ne pas perdre la recherche
                     applySearch();
                 }
             );

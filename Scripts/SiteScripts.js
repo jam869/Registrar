@@ -144,7 +144,7 @@ function ajaxActionCall(actionLink) {
     });
 }
 
-let minKeywordLenth = 1;
+var minKeywordLenth = 1;
 function highlight(text, elem) {
     text = text.trim();
     if (text.length >= minKeywordLenth) {

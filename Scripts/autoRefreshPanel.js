@@ -10,7 +10,6 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////let EndSessionAction = '/Accounts/Login'; 
 
 let DefaultPeriodicRefreshRate = 15 /* 15 seconds */;
-let EndSessionAction = '/Accounts/Login';
 let timerHideUpdateView = null;
 class AutoRefreshedPanel {
     constructor(panelId, contentServiceURL, refreshRate = DefaultPeriodicRefreshRate, postRefreshCallback = null) {
@@ -36,7 +35,7 @@ class AutoRefreshedPanel {
         if (htmlContent !== "") {
             $("#" + this.panelId).html(htmlContent);
             console.log(`Panel ${this.panelId} has been refreshed.`);
-            if (this.postRefreshCallback != null) this.postRefreshCallback();
+            if (this.postRefreshCallback != null) this.postRefreshCallback(htmlContent);
         }
     }
     redirect() {
