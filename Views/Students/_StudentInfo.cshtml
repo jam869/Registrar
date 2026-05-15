@@ -1,0 +1,22 @@
+@model Registrar.Models.Student
+
+<details id="student_info" open>
+    <summary class="btn-details-summary">
+        <i class="fa fa-graduation-cap"></i> @Model.FirstName @Model.LastName
+    </summary>
+
+    <div class="details-content-panel" style="padding: 20px;">
+        <div class="detail-row">
+            <i class="fa fa-barcode"></i> <strong>@Model.Code</strong>
+        </div>
+        <div class="detail-row">
+            <i class="fa fa-phone"></i> @Model.Phone
+        </div>
+        <div class="detail-row">
+            <i class="fa fa-envelope"></i> @Model.Email
+        </div>
+        <div class="detail-row">
+            <i class="fa fa-birthday-cake"></i> Né le @Model.BirthDate.ToString("d MMMM yyyy")
+        </div>
+    </div>
+</details>

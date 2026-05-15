@@ -1,0 +1,23 @@
+@model Registrar.Models.Student
+
+<h3 style="margin-top:30px;">Inscriptions</h3>
+
+@if (ViewBag.GroupedInscriptions != null)
+{
+    foreach (var group in (IEnumerable<IGrouping<int, Registrar.Models.Course>>)ViewBag.GroupedInscriptions)
+    {
+        <details open style="margin-bottom: 10px;">
+            <summary class="btn-details-summary">@group.Key</summary>
+            <div class="details-content-panel" style="padding: 15px;">
+                @foreach (var course in group)
+                {
+                    <div class="course-row" style="margin-bottom: 8px;">
+                        <a href="@Url.Action("Details", "Courses", new { id = course.Id })" style="color: black; text-decoration: none;">
+                            <span style="color: #0066cc; font-weight: bold;">[@course.Session] @course.Code</span> @course.Title
+                        </a>
+                    </div>
+                }
+            </div>
+        </details>
+    }
+}

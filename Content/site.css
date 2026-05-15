@@ -376,43 +376,67 @@ summary {
     border-bottom-right-radius: 8px;
 }
 
-/* Style pour le modal Bootbox (Nicolas Chourot) */
+.bootbox .modal-content {
+    border-radius: 0 !important; /* Fenêtre parfaitement carrée */
+    border: 1px solid #ccc;
+}
+
 .bootbox .modal-header {
-    background-color: #d9534f;
-    color: white;
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
+    display: none !important; /* Détruit complètement la zone de titre */
 }
 
-.bootbox .modal-title {
+.bootbox .bootbox-body {
+    color: red !important; /* Le texte "Effacer ?" en rouge */
     font-weight: bold;
-    font-size: 1.5em;
+    font-size: 1em;
 }
 
-.bootbox .close {
-    color: white;
-    opacity: 1;
+.bootbox .modal-footer {
+    border-top: none; /* Enlève la ligne au-dessus des boutons */
 }
 
-.bootbox .modal-footer .btn-danger {
-    background-color: #d9534f;
-    border-color: #d43f3a;
+/* Boutons carrés */
+.bootbox .btn {
+    border-radius: 0 !important;
 }
 
-/* Le bouton X : Carré bleu avec X blanc */
-.btn-close-square {
-    background-color: #0066cc;
+/* Bouton D'accord en bleu */
+.bootbox .modal-footer .btn-primary {
+    background-color: #0066cc !important;
+    border-color: #0055aa !important;
     color: white !important;
-    width: 30px;
-    height: 30px;
-    display: flex;
+}
+
+/* Boutons carrés */
+.bootbox .btn {
+    border-radius: 0 !important;
+}
+
+/* Bouton D'accord en bleu */
+.bootbox .modal-footer .btn-primary {
+    background-color: #0066cc !important;
+    border-color: #0055aa !important;
+    color: white !important;
+}
+/* Bouton X : Carré bleu avec X blanc */
+.btn-close-square {
+    background-color: #0066cc !important; /* Bleu de l'école */
+    color: white !important; /* X en blanc */
+    width: 24px;
+    height: 24px;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    border-radius: 4px;
-    text-decoration: none;
-    margin-left: 5px;
+    border-radius: 4px; /* Mettez 0 ici si vous ne voulez aucun petit arrondi aux coins */
+    text-decoration: none !important;
+    font-size: 16px;
+    margin-left: 1px;
 }
 
+    .btn-close-square:hover {
+        background-color: #004c99 !important; /* Bleu un peu plus foncé au survol */
+        color: white !important;
+    }
 /* Alignement Libellé : Champ de saisie (image_68c9dd.png) */
 .form-horizontal-row {
     display: flex;

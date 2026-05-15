@@ -28,6 +28,43 @@ namespace Registrar.Controllers
             return null;
         }
 
+        [AccessControl.UserAccess(Access.View)]
+        public ActionResult GetCourseInfo(int id, bool forceRefresh = false)
+        {
+            if (forceRefresh || DB.Courses.HasChanged)
+            {
+                var course = DB.Courses.Get(id);
+                if (course == null) return HttpNotFound();
+                return PartialView("_CourseInfo", course);
+            }
+            return null;
+        }
+
+        [AccessControl.UserAccess(Access.View)]
+        public ActionResult GetCourseStudents(int id, bool forceRefresh = false)
+        {
+            // On ajoute DB.Teachers.HasChanged car la vue affiche le nom de l'enseignant !
+            if (forceRefresh || DB.Courses.HasChanged || DB.Students.HasChanged || DB.Teachers.HasChanged)
+            {
+                var course = DB.Courses.Get(id);
+                if (course == null) return null;
+
+                var enrolledStudents = DB.Students.ToList()
+                    .Where(s => course.Inscriptions.Contains(s.Id))
+                    .OrderBy(s => s.LastName)
+                    .ToList();
+
+                // On recrée le groupement par année (Cohorte) pour que la vue l'affiche correctement
+                ViewBag.GroupedInscriptions = enrolledStudents
+                    .GroupBy(s => s.Year)
+                    .OrderByDescending(g => g.Key)
+                    .ToList();
+
+                // CORRECTION : On envoie "course" comme modèle (au lieu de la liste enrolledStudents)
+                return PartialView("_CourseStudents", course);
+            }
+            return null;
+        }
         [AccessControl.UserAccess(Access.Write)]
         public ActionResult Create()
         {

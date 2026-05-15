@@ -1,4 +1,5 @@
 using Controllers;
+using DAL;
 using Registrar.Models;
 using System;
 using System.Collections.Generic;
@@ -25,6 +26,47 @@ namespace Registrar.Controllers
             {
                 var list = Teachers.ToList().OrderBy(t => t.LastName).ThenBy(t => t.FirstName).ToList();
                 return PartialView(list);
+            }
+            return null;
+        }
+
+        [AccessControl.UserAccess(Access.View)]
+        public ActionResult GetTeacherInfo(int id, bool forceRefresh = false)
+        {
+            if (forceRefresh || DB.Teachers.HasChanged)
+            {
+                var teacher = DB.Teachers.Get(id);
+                if (teacher == null) return HttpNotFound();
+                return PartialView("_TeacherInfo", teacher);
+            }
+            return null;
+        }
+
+        [AccessControl.UserAccess(Access.View)]
+        public ActionResult GetTeacherAllocations(int id, bool forceRefresh = false)
+        {
+            // On rafraîchit si le prof OU les cours (allocations) ont changé
+            if (forceRefresh || DB.Teachers.HasChanged || DB.Courses.HasChanged)
+            {
+                var teacher = DB.Teachers.Get(id);
+                if (teacher == null) return null;
+
+                var allocationsList = new List<Tuple<int, Course>>();
+                foreach (var c in DB.Courses.ToList())
+                {
+                    foreach (var a in c.Allocations)
+                    {
+                        if (a.Value == id)
+                            allocationsList.Add(new Tuple<int, Course>(a.Key, c));
+                    }
+                }
+
+                ViewBag.GroupedAllocations = allocationsList
+                    .GroupBy(x => x.Item1)
+                    .OrderByDescending(g => g.Key)
+                    .ToList();
+
+                return PartialView("_TeacherAllocations", teacher);
             }
             return null;
         }
@@ -120,20 +162,25 @@ namespace Registrar.Controllers
         {
             Teacher teacher = DAL.DB.Teachers.Get(id);
             if (teacher == null) return HttpNotFound();
+
             ViewBag.Title = "Professeur - Détails";
 
+            // 1. On force la création d'une liste explicite de Tuples pour éviter le type anonyme
             var allocationsList = new List<Tuple<int, Course>>();
+
             foreach (var c in DAL.DB.Courses.ToList())
             {
                 foreach (var a in c.Allocations)
                 {
                     if (a.Value == id)
                     {
+                        // Ajout explicite d'un Tuple <Année, Cours>
                         allocationsList.Add(new Tuple<int, Course>(a.Key, c));
                     }
                 }
             }
 
+            // 2. On groupe cette liste sécurisée
             ViewBag.GroupedAllocations = allocationsList
                 .GroupBy(x => x.Item1)
                 .OrderByDescending(g => g.Key)

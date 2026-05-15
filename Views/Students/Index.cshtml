@@ -2,7 +2,7 @@
 
 
 <div class="header-container">
-    
+
     <div class="search-bar-container" style="margin-bottom: 15px;">
 
         <div id="searchPanel" style="display:none; margin-top:10px; background:#f9f9f9; padding:10px; border-radius:5px;">
@@ -18,8 +18,8 @@
 
 <hr />
 
-<div class="students-list" id="studentsListContainer">
-    <img src="~/Content/UI-Images/Loading_icon.gif" alt="Chargement en cours..." style="display:block; margin:auto;" />
+<div id="studentsListContainer">
+    @{ Html.RenderAction("GetStudents", new { forceRefresh = true }); }
 </div>
 @section Scripts {
     <script>
@@ -27,8 +27,8 @@
     $("#toggleSearchBtn").click(function () {
         $("#searchPanel").slideToggle();
     });
-    
- 
+
+
 
             // Fonction de filtre et de surbrillance
             function applySearch() {
@@ -89,4 +89,5 @@
             );
         });
     </script>
+   
 }

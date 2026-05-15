@@ -168,6 +168,7 @@ function highlight(text, elem) {
 
 $(document).ready(function () {
     // Restaurer l'état au chargement
+    // Restaurer l'état au chargement
     $("details").each(function () {
         if (this.id) {
             let savedState = localStorage.getItem(this.id);
@@ -183,39 +184,21 @@ $(document).ready(function () {
         }
     });
 
-
-    $(document).ready(function () {
-        $("#menu-toggle").click(function () {
-            $("#side-menu").addClass("open");
-        });
-
-        $("#menu-close").click(function () {
-            $("#side-menu").removeClass("open");
-        });
-
-        // Fermer si on clique à l'extérieur
-        $(document).click(function (e) {
-            if (!$(e.target).closest('#side-menu, #menu-toggle').length) {
-                $("#side-menu").removeClass("open");
-            }
-        });
+    $("#menu-toggle").click(function () {
+        $("#side-menu").addClass("open");
     });
 
-    function bootboxConfirmDelete(url, controller) {
-        bootbox.confirm({
-            title: "Effacer",
-            message: "Effacer ?",
-            buttons: {
-                cancel: { label: 'Annuler', className: 'btn-secondary' },
-                confirm: { label: "D'accord", className: 'btn-danger' }
-            },
-            callback: function (result) {
-                if (result) {
-                    window.location.href = url;
-                }
-            }
-        });
-    }
+    $("#menu-close").click(function () {
+        $("#side-menu").removeClass("open");
+    });
+
+    // Fermer si on clique à l'extérieur
+    $(document).click(function (e) {
+        if (!$(e.target).closest('#side-menu, #menu-toggle').length) {
+            $("#side-menu").removeClass("open");
+        }
+    });
+
     // Gérer le Ctrl+Clic pour tout ouvrir/fermer
     $("summary").click(function (e) {
         if (e.ctrlKey) {
@@ -235,3 +218,20 @@ $(document).ready(function () {
     });
 
 });
+
+
+function bootboxConfirmDelete(url, controller) {
+    bootbox.confirm({
+        closeButton: false, // Enlève le X en haut à droite
+        message: "Effacer ?", // JUSTE le message
+        buttons: {
+            cancel: { label: 'Annuler', className: 'btn-secondary' },
+            confirm: { label: "D'accord", className: 'btn-primary' }
+        },
+        callback: function (result) {
+            if (result) {
+                window.location.href = url;
+            }
+        }
+    });
+}

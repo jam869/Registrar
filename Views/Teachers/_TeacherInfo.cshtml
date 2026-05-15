@@ -1,0 +1,24 @@
+@model Registrar.Models.Teacher
+@{
+    double seniority = (Registrar.Models.NextSession.CurrentDate - Model.StartDate).TotalDays / 365.25;
+}
+
+<details id="teacher_info" open>
+    <summary class="btn-details-summary">
+        <i class="fa fa-chalkboard-teacher"></i> @Model.FirstName @Model.LastName
+    </summary>
+
+    <div class="details-content-panel">
+        <div style="display: flex; gap: 30px; align-items: flex-start; padding: 20px;">
+            <div>
+                @Helper.Image(Model.Avatar, "UserMediumAvatar")
+            </div>
+            <div>
+                <div class="detail-row"><i class="fa fa-barcode"></i> <strong>@Model.Code</strong></div>
+                <div class="detail-row"><i class="fa fa-phone"></i> @Model.Phone</div>
+                <div class="detail-row"><i class="fa fa-calendar-alt"></i> Embauché le @Model.StartDate.ToString("d MMMM yyyy")</div>
+                <div class="detail-row"><i class="fa fa-clock"></i> @seniority.ToString("F1") ans d'ancienneté</div>
+            </div>
+        </div>
+    </div>
+</details>

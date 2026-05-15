@@ -3,46 +3,31 @@
     ViewBag.Title = "Étudiant - Détails";
 }
 
-<details id="student_info" open>
-    <summary class="btn-details-summary">
-        <i class="fa fa-graduation-cap"></i> @Model.FirstName @Model.LastName
-    </summary>
-
-    <div class="details-content-panel" style="padding: 20px;">
-        <div class="detail-row">
-            <i class="fa fa-barcode"></i> <strong>@Model.Code</strong>
-        </div>
-        <div class="detail-row">
-            <i class="fa fa-phone"></i> @Model.Phone
-        </div>
-        <div class="detail-row">
-            <i class="fa fa-envelope"></i> @Model.Email
-        </div>
-        <div class="detail-row">
-            <i class="fa fa-birthday-cake"></i> Né le @Model.BirthDate.ToString("d MMMM yyyy")
-        </div>
+<div style="max-width: 900px; margin: auto;">
+    <div id="studentInfoContainer">
+        @{ Html.RenderAction("GetStudentInfo", new { id = Model.Id, forceRefresh = true }); }
     </div>
-</details>
 
-<h3 style="margin-top:30px;">Inscriptions</h3>
+    <div id="inscriptionsContainer">
+        @{ Html.RenderAction("GetStudentInscriptions", new { id = Model.Id, forceRefresh = true }); }
+    </div>
+</div>
 
-@if (ViewBag.GroupedInscriptions != null)
-{
-    @* C'EST CETTE LIGNE QUI RÈGLE L'ERREUR (Le Cast explicite) *@
-    foreach (var group in (IEnumerable<IGrouping<int, Registrar.Models.Course>>)ViewBag.GroupedInscriptions)
-    {
-        <details open style="margin-bottom: 10px;">
-            <summary class="btn-details-summary">@group.Key</summary>
-            <div class="details-content-panel" style="padding: 15px;">
-                @foreach (var course in group)
-                {
-                    <div class="course-row" style="margin-bottom: 8px;">
-                        <a href="@Url.Action("Details", "Courses", new { id = course.Id })" style="color: black; text-decoration: none;">
-                            <span style="color: #0066cc; font-weight: bold;">[@course.Session] @course.Code</span> @course.Title
-                        </a>
-                    </div>
-                }
-            </div>
-        </details>
-    }
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Rafraîchissement automatique toutes les 5 secondes
+            new AutoRefreshedPanel(
+                "studentInfoContainer",
+                "@Url.Action("GetStudentInfo", new { id = Model.Id })",
+                5
+            );
+
+            new AutoRefreshedPanel(
+                "inscriptionsContainer",
+                "@Url.Action("GetStudentInscriptions", new { id = Model.Id })",
+                5
+            );
+        });
+    </script>
 }

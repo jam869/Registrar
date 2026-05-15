@@ -35,6 +35,40 @@ namespace Registrar.Controllers
             return View(student);
         }
 
+        [AccessControl.UserAccess(Access.View)]
+        public ActionResult GetStudentInfo(int id, bool forceRefresh = false)
+        {
+            // Rafraîchit si un changement a eu lieu dans les étudiants
+            if (forceRefresh || Students.HasChanged)
+            {
+                var student = Students.Get(id);
+                if (student == null) return null;
+                return PartialView("_StudentInfo", student);
+            }
+            return null;
+        }
+
+        [AccessControl.UserAccess(Access.View)]
+        public ActionResult GetStudentInscriptions(int id, bool forceRefresh = false)
+        {
+            // Rafraîchit si un changement a eu lieu dans les étudiants OU les cours
+            if (forceRefresh || Students.HasChanged || Courses.HasChanged)
+            {
+                var student = Students.Get(id);
+                if (student == null) return null;
+
+                var courses = Courses.ToList().Where(c => c.Inscriptions.Contains(id)).ToList();
+
+                // Le calcul des années
+                ViewBag.GroupedInscriptions = courses
+                    .GroupBy(c => student.Year + ((c.Session - 1) / 2))
+                    .OrderByDescending(g => g.Key)
+                    .ToList();
+
+                return PartialView("_StudentInscriptions", student);
+            }
+            return null;
+        }
         // POST: Students/Edit/5
         [HttpPost]
         [AccessControl.UserAccess(Access.Write)]
